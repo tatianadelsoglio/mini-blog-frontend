@@ -1,31 +1,25 @@
-// app/page.tsx
-interface Post {
-  id: number;
-  documentId: string;
-  title: string;
-  content: string;
-}
-
-async function getPosts(): Promise<Post[]> {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_STRAPI_URL}/api/posts`);
-  const json = await res.json();
-  return json.data;
-}
+import { getPosts } from "@/lib/posts";
+import { PostList } from "@/components/PostList";
 
 export default async function Home() {
   const posts = await getPosts();
 
   return (
-    <main className="p-8">
-      <h1 className="text-2xl font-bold mb-4">Mini Blog</h1>
-      <ul className="space-y-2">
-        {posts.map((post) => (
-          <li key={post.id} className="border p-4 rounded">
-            <h2 className="font-semibold">{post.title}</h2>
-            <p>{post.content}</p>
-          </li>
-        ))}
-      </ul>
-    </main>
+    <div>
+      <div className="flex flex-col gap-3 px-6 py-16 sm:px-16 sm:pb-10">
+        <span className="font-body text-caption tracking-wide text-accent uppercase">
+          Cuaderno de notas
+        </span>
+        <h1 className="max-w-2xl font-heading text-hero font-semibold text-text-primary">
+          Historias breves para leer con calma
+        </h1>
+        <p className="max-w-xl font-body text-body-lg text-text-secondary">
+          Notas, reflexiones y pequeños hallazgos de todos los días.
+        </p>
+      </div>
+      <div className="px-6 pt-6 pb-20 sm:px-16">
+        <PostList posts={posts} />
+      </div>
+    </div>
   );
 }
