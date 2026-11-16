@@ -43,3 +43,7 @@ next-env.d.ts
 
 # docs (material de estudio personal, no se versiona)
 /docs
+
+# archivos de agentes (no se versionan)
+/AGENTS.md
+/CLAUDE.md
