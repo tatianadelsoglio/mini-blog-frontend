@@ -12,7 +12,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${siteUrl}/sobre`, changeFrequency: "yearly", priority: 0.5 },
     ...posts.map((post) => ({
       url: `${siteUrl}/posts/${post.slug}`,
-      lastModified: post.publishedAt ?? undefined,
+      lastModified: post.updatedAt ?? post.publishedAt ?? undefined,
       changeFrequency: "monthly" as const,
       priority: 0.7,
     })),

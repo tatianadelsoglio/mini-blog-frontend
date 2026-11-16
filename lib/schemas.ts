@@ -48,6 +48,7 @@ export const postSchema = z.object({
     .nullish()
     .transform((value) => value ?? ""),
   publishedAt: nullableString,
+  updatedAt: nullableString,
   coverImage: imageSchema.nullish().transform((value) => value ?? null),
   category: categorySchema.nullish().transform((value) => value ?? null),
 });
