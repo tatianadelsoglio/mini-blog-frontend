@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { HistoriasFilters } from "@/components/HistoriasFilters";
 import { Pagination } from "@/components/Pagination";
 import { PostList } from "@/components/PostList";
@@ -10,11 +11,20 @@ import {
   parseHistoriasParams,
 } from "@/lib/postFilters";
 
-export const metadata: Metadata = {
-  title: "Historias",
-  description: "Todas las historias de Cuaderno: filtrá por tema o buscá por palabra.",
-  alternates: { canonical: "/historias" },
-};
+export async function generateMetadata(
+  props: PageProps<"/historias">
+): Promise<Metadata> {
+  const { q } = parseHistoriasParams(await props.searchParams);
+
+  return {
+    title: "Historias",
+    description:
+      "Todas las historias de Cuaderno: filtrá por tema o buscá por palabra.",
+    alternates: { canonical: "/historias" },
+    // Los resultados de búsqueda no se indexan; las páginas y categorías sí.
+    ...(q && { robots: { index: false, follow: true } }),
+  };
+}
 
 // Los parámetros de la URL hacen que la página se renderice por request, pero
 // los datos salen de la caché de fetch (tags posts/categories): Strapi no se
@@ -27,6 +37,9 @@ export default async function HistoriasPage(props: PageProps<"/historias">) {
   const { items, page, pageCount, total } = paginate(filtered, filters.pagina);
   const hasFilters = Boolean(filters.categoria || filters.q);
 
+  // paginate ajusta la página al rango válido; si pidieron una que no existe, 404.
+  if (filters.pagina > pageCount) notFound();
+
   return (
     <div className="flex flex-col gap-10 px-6 py-16 sm:px-16">
       <header className="flex flex-col gap-3">
@@ -35,7 +48,7 @@ export default async function HistoriasPage(props: PageProps<"/historias">) {
         </h1>
         <p className="font-body text-body-lg text-text-secondary">
           {total} {total === 1 ? "historia" : "historias"}
-          {hasFilters ? " encontradas" : ""}
+          {hasFilters ? (total === 1 ? " encontrada" : " encontradas") : ""}
         </p>
       </header>
 
