@@ -48,7 +48,11 @@ export async function POST(request: NextRequest) {
 
   let payload: StrapiWebhookPayload;
   try {
-    payload = await request.json();
+    const body: unknown = await request.json();
+    if (typeof body !== "object" || body === null || Array.isArray(body)) {
+      throw new Error("El body debe ser un objeto JSON");
+    }
+    payload = body;
   } catch {
     return NextResponse.json({ error: "Body inválido" }, { status: 400 });
   }
