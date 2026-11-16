@@ -1,14 +1,32 @@
+import { isAllowedImageUrl } from "@/lib/imageHosts";
 import type { StrapiImage } from "@/lib/schemas";
 
 type ImageSize = "thumbnail" | "small" | "medium" | "large";
 
-/** URL de la imagen. Supabase devuelve URLs absolutas; las relativas son de Strapi. */
+const warnedUrls = new Set<string>();
+
+/**
+ * URL de la imagen lista para next/image, o null si no hay imagen o su origen
+ * no está permitido (en ese caso se omite y se loguea una vez, en lugar de
+ * romper la página). Supabase devuelve URLs absolutas; las relativas son de Strapi.
+ */
 export function getImageUrl(
   image: StrapiImage | null,
   size: ImageSize = "large"
 ): string | null {
   if (!image) return null;
-  const url = image.formats?.[size]?.url ?? image.url;
-  if (/^https?:\/\//.test(url)) return url;
-  return `${process.env.STRAPI_URL?.replace(/\/$/, "") ?? ""}${url}`;
+  const raw = image.formats?.[size]?.url ?? image.url;
+  const url = /^https?:\/\//.test(raw)
+    ? raw
+    : `${process.env.STRAPI_URL?.replace(/\/$/, "") ?? ""}${raw}`;
+
+  if (isAllowedImageUrl(url)) return url;
+
+  if (!warnedUrls.has(url)) {
+    warnedUrls.add(url);
+    console.warn(
+      `[images] Imagen omitida: ${url} no está en los dominios permitidos (revisar STRAPI_URL y SUPABASE_PUBLIC_URL).`
+    );
+  }
+  return null;
 }
