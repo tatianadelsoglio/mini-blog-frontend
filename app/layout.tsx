@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Playfair_Display, Inter } from "next/font/google";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { getSiteUrl, SITE_DESCRIPTION, SITE_NAME } from "@/lib/site";
 import "./globals.css";
 
 const playfairDisplay = Playfair_Display({
@@ -15,8 +16,17 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Cuaderno — Mini Blog",
-  description: "Historias breves para leer con calma.",
+  metadataBase: new URL(getSiteUrl()),
+  title: { default: SITE_NAME, template: `%s | ${SITE_NAME}` },
+  description: SITE_DESCRIPTION,
+  openGraph: {
+    type: "website",
+    siteName: SITE_NAME,
+    locale: "es_AR",
+    title: SITE_NAME,
+    description: SITE_DESCRIPTION,
+  },
+  twitter: { card: "summary_large_image" },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
