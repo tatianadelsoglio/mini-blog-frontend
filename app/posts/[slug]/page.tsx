@@ -10,6 +10,7 @@ import { formatDate, getPostSummary, getReadingTime } from "@/lib/format";
 import { getImageUrl } from "@/lib/images";
 import { getAdjacentPosts } from "@/lib/postNavigation";
 import { getPostBySlug, getPosts } from "@/lib/posts";
+import { DEFAULT_OG_IMAGE } from "@/lib/site";
 
 // Se prerenderizan los posts conocidos en el build; uno nuevo se genera en la
 // primera visita y queda cacheado hasta que el webhook lo revalide.
@@ -38,17 +39,12 @@ export async function generateMetadata(
       description,
       url: `/posts/${post.slug}`,
       publishedTime: post.publishedAt ?? undefined,
-      ...(cover && {
-        images: [
-          {
-            url: cover,
-            alt: post.coverImage?.alternativeText || post.title,
-          },
-        ],
-      }),
+      images: cover
+        ? [{ url: cover, alt: post.coverImage?.alternativeText || post.title }]
+        : [DEFAULT_OG_IMAGE],
     },
     twitter: {
-      card: cover ? "summary_large_image" : "summary",
+      card: "summary_large_image",
       title: post.title,
       description,
     },

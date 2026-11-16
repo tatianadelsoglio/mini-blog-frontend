@@ -4,7 +4,7 @@ import { PostContent } from "@/components/PostContent";
 import { getAbout } from "@/lib/about";
 import { getExcerpt } from "@/lib/format";
 import { getImageUrl } from "@/lib/images";
-import { SITE_DESCRIPTION } from "@/lib/site";
+import { DEFAULT_OG_IMAGE, SITE_DESCRIPTION } from "@/lib/site";
 
 export async function generateMetadata(): Promise<Metadata> {
   const about = await getAbout();
@@ -21,7 +21,7 @@ export async function generateMetadata(): Promise<Metadata> {
       title: about?.title ?? "Sobre",
       description,
       url: "/sobre",
-      ...(photo && { images: [{ url: photo, alt: about?.title }] }),
+      images: photo ? [{ url: photo, alt: about?.title }] : [DEFAULT_OG_IMAGE],
     },
   };
 }
