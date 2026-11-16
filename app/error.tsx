@@ -13,8 +13,13 @@ export default function Error({
         Algo salió mal
       </h1>
       <p className="font-body text-body text-text-secondary">
-        {error.message || "No pudimos cargar el contenido."}
+        No pudimos cargar el contenido. Probá de nuevo en unos instantes.
       </p>
+      {error.digest && (
+        <p className="font-body text-caption text-text-secondary">
+          Código: {error.digest}
+        </p>
+      )}
       <button
         onClick={reset}
         className="font-body text-caption tracking-wide text-accent uppercase"
