@@ -1,12 +1,16 @@
-import type { Post } from "@/lib/posts";
+import type { Post } from "@/lib/schemas";
 import { PostCard } from "@/components/PostCard";
 
-export function PostList({ posts }: { posts: Post[] }) {
+export function PostList({
+  posts,
+  emptyMessage = "Todavía no hay posts publicados.",
+}: {
+  posts: Post[];
+  emptyMessage?: string;
+}) {
   if (posts.length === 0) {
     return (
-      <p className="font-body text-body text-text-secondary">
-        Todavía no hay posts publicados.
-      </p>
+      <p className="font-body text-body text-text-secondary">{emptyMessage}</p>
     );
   }
 

@@ -25,3 +25,11 @@ export function getReadingTime(content: string): number {
   const words = content.replace(MARKDOWN_SYMBOLS, " ").split(/\s+/).filter(Boolean).length;
   return Math.max(1, Math.ceil(words / WORDS_PER_MINUTE));
 }
+
+/** Resumen de un post: el excerpt de Strapi, o un recorte del contenido si falta. */
+export function getPostSummary(
+  post: { excerpt: string | null; content: string },
+  maxLength = 140
+): string {
+  return post.excerpt?.trim() || getExcerpt(post.content, maxLength);
+}
