@@ -28,7 +28,7 @@ export interface Post {
 
 export async function getPosts(): Promise<Post[]> {
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/posts?populate=coverImage`
+    `${process.env.STRAPI_URL}/api/posts?populate=coverImage`
   );
   if (!res.ok) {
     throw new Error("No se pudieron cargar los posts");
@@ -39,7 +39,7 @@ export async function getPosts(): Promise<Post[]> {
 
 export async function getPost(documentId: string): Promise<Post | null> {
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/posts/${documentId}?populate=coverImage`
+    `${process.env.STRAPI_URL}/api/posts/${documentId}?populate=coverImage`
   );
   if (res.status === 404) {
     return null;
@@ -59,7 +59,7 @@ export function getImageUrl(
   const url = image.formats?.[size]?.url ?? image.url;
   return url.startsWith("http")
     ? url
-    : `${process.env.NEXT_PUBLIC_STRAPI_URL}${url}`;
+    : `${process.env.STRAPI_URL}${url}`;
 }
 
 export function getExcerpt(content: string, maxLength = 140): string {
