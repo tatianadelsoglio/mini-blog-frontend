@@ -1,13 +1,8 @@
 import { POSTS_TAG } from "@/lib/cacheTags";
-import {
-  listResponseSchema,
-  postSchema,
-  type Post,
-} from "@/lib/schemas";
-import { parseStrapi, strapiFetch } from "@/lib/strapi";
+import { postSchema, type Post } from "@/lib/schemas";
+import { parseStrapiList, strapiFetch } from "@/lib/strapi";
 
 const PAGE_SIZE = 50;
-const postListSchema = listResponseSchema(postSchema);
 
 function postsQuery(extra: Record<string, string> = {}): string {
   const params = new URLSearchParams({
@@ -31,9 +26,9 @@ export async function getPosts(): Promise<Post[]> {
       `/api/posts?${postsQuery({ "pagination[page]": String(page) })}`,
       { tags: [POSTS_TAG] }
     );
-    const parsed = parseStrapi(postListSchema, json, "GET /api/posts");
-    posts.push(...parsed.data);
-    pageCount = parsed.meta.pagination.pageCount;
+    const parsed = parseStrapiList(postSchema, json, "GET /api/posts");
+    posts.push(...parsed.items);
+    pageCount = parsed.pagination.pageCount;
     page += 1;
   } while (page <= pageCount);
 

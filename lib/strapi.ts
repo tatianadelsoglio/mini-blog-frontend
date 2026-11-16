@@ -1,4 +1,5 @@
 import type { z } from "zod";
+import { listResponseSchema } from "@/lib/schemas";
 import { FALLBACK_REVALIDATE_SECONDS } from "@/lib/cacheTags";
 
 // Render Free duerme el backend tras 15 min y tarda ~1 min en despertar.
@@ -101,4 +102,36 @@ export function parseStrapi<T extends z.ZodType>(
     throw new StrapiError(`Respuesta inesperada de Strapi en ${context}: ${detail}`);
   }
   return result.data;
+}
+
+/**
+ * Valida una lista de Strapi: el sobre es obligatorio (si falla, error), pero
+ * un item inválido se descarta con un log en lugar de tumbar toda la lista.
+ */
+export function parseStrapiList<T extends z.ZodType>(
+  itemSchema: T,
+  json: unknown,
+  context: string
+): { items: z.infer<T>[]; pagination: { page: number; pageCount: number; total: number } } {
+  const envelope = parseStrapi(listResponseSchema, json, context);
+  const items: z.infer<T>[] = [];
+
+  envelope.data.forEach((raw, index) => {
+    const result = itemSchema.safeParse(raw);
+    if (result.success) {
+      items.push(result.data);
+      return;
+    }
+    const id =
+      typeof raw === "object" && raw !== null && "documentId" in raw
+        ? String(raw.documentId)
+        : `#${index}`;
+    const detail = result.error.issues
+      .slice(0, 3)
+      .map((issue) => `${issue.path.join(".") || "(raíz)"}: ${issue.message}`)
+      .join("; ");
+    console.warn(`[strapi] ${context}: item ${id} descartado (${detail})`);
+  });
+
+  return { items, pagination: envelope.meta.pagination };
 }

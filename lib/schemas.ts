@@ -71,11 +71,11 @@ const paginationSchema = z.object({
   total: z.number(),
 });
 
-export const listResponseSchema = <T extends z.ZodType>(item: T) =>
-  z.object({
-    data: z.array(item),
-    meta: z.object({ pagination: paginationSchema }),
-  });
+// Los items se validan uno por uno (parseStrapiList): acá solo el sobre.
+export const listResponseSchema = z.object({
+  data: z.array(z.unknown()),
+  meta: z.object({ pagination: paginationSchema }),
+});
 
 export const singleResponseSchema = <T extends z.ZodType>(item: T) =>
   z.object({ data: item.nullable() });

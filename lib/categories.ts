@@ -1,8 +1,6 @@
 import { CATEGORIES_TAG } from "@/lib/cacheTags";
-import { categorySchema, listResponseSchema, type Category } from "@/lib/schemas";
-import { parseStrapi, strapiFetch } from "@/lib/strapi";
-
-const categoryListSchema = listResponseSchema(categorySchema);
+import { categorySchema, type Category } from "@/lib/schemas";
+import { parseStrapiList, strapiFetch } from "@/lib/strapi";
 
 export const POEMS_CATEGORY_SLUG = "poemas";
 
@@ -14,7 +12,7 @@ export async function getCategories(): Promise<Category[]> {
   const json = await strapiFetch(`/api/categories?${query}`, {
     tags: [CATEGORIES_TAG],
   });
-  return parseStrapi(categoryListSchema, json, "GET /api/categories").data;
+  return parseStrapiList(categorySchema, json, "GET /api/categories").items;
 }
 
 export interface CategoryWithCount extends Category {
