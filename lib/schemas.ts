@@ -7,6 +7,20 @@ const nullableString = z
   .nullish()
   .transform((value) => value ?? null);
 
+// Enlaces externos editables en Strapi: solo https:// y URL bien formada; si
+// no, se normaliza a null y la UI no muestra el link (evita javascript: y similares).
+const httpsUrl = z
+  .string()
+  .nullish()
+  .transform((value) => {
+    if (!value) return null;
+    try {
+      return new URL(value).protocol === "https:" ? value : null;
+    } catch {
+      return null;
+    }
+  });
+
 const imageFormatSchema = z.object({
   url: z.string(),
   width: z.number(),
@@ -62,8 +76,8 @@ export const aboutSchema = z.object({
     .nullish()
     .transform((value) => value ?? ""),
   photo: imageSchema.nullish().transform((value) => value ?? null),
-  githubUrl: nullableString,
-  linkedinUrl: nullableString,
+  githubUrl: httpsUrl,
+  linkedinUrl: httpsUrl,
 });
 
 const paginationSchema = z.object({
