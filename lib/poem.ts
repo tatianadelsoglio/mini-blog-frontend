@@ -1,6 +1,6 @@
 export interface PoemSegment {
   text: string;
-  italic: boolean;
+  style: "plain" | "italic" | "bold";
 }
 
 // Separa estrofas por líneas en blanco, sin tocar los espacios iniciales de
@@ -13,24 +13,36 @@ export function splitStanzas(content: string): string[] {
     .filter((stanza) => stanza.length > 0);
 }
 
-// Cursiva marcada con *texto* o _texto_ (el guion bajo solo en límites de palabra).
-const ITALIC =
-  /\*([^*\n]+)\*|(?<![\p{L}\p{N}])_([^_\n]+)_(?![\p{L}\p{N}])/gu;
+// Como en Markdown, el delimitador de apertura debe ir pegado a un carácter
+// no espacio y el de cierre también: "* * *" no abre ni cierra nada y queda
+// como texto literal. El guion bajo solo cuenta en límites de palabra.
+//   1: **negrita**   2: *cursiva*   3: _cursiva_
+const INLINE =
+  /\*\*(?=\S)([^\n]*?\S)\*\*|\*(?=[^\s*])([^*\n]*?[^\s*])\*|(?<![\p{L}\p{N}_])_(?=[^\s_])([^_\n]*?[^\s_])_(?![\p{L}\p{N}_])/gu;
 
-export function parseItalics(line: string): PoemSegment[] {
+export function parseInline(line: string): PoemSegment[] {
   const segments: PoemSegment[] = [];
   let lastIndex = 0;
 
-  for (const match of line.matchAll(ITALIC)) {
+  for (const match of line.matchAll(INLINE)) {
     if (match.index > lastIndex) {
-      segments.push({ text: line.slice(lastIndex, match.index), italic: false });
+      segments.push({ text: line.slice(lastIndex, match.index), style: "plain" });
     }
-    segments.push({ text: match[1] ?? match[2], italic: true });
+    if (match[1] !== undefined) {
+      segments.push({ text: match[1], style: "bold" });
+    } else {
+      segments.push({ text: match[2] ?? match[3], style: "italic" });
+    }
     lastIndex = match.index + match[0].length;
   }
 
   if (lastIndex < line.length) {
-    segments.push({ text: line.slice(lastIndex), italic: false });
+    segments.push({ text: line.slice(lastIndex), style: "plain" });
   }
   return segments;
+}
+
+/** Estrofa que es solo un separador ornamental ("* * *", "***", "---"). */
+export function isStanzaBreak(stanza: string): boolean {
+  return /^\s*(?:(?:\*\s*){3,}|(?:-\s*){3,})$/.test(stanza);
 }
