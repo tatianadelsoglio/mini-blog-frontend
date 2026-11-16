@@ -3,8 +3,6 @@ export const POSTS_TAG = "posts";
 export const CATEGORIES_TAG = "categories";
 export const ABOUT_TAG = "about";
 
-export const postTag = (slug: string) => `post:${slug}`;
-
 export const ALL_TAGS = [POSTS_TAG, CATEGORIES_TAG, ABOUT_TAG] as const;
 
 // Fallback por si el webhook falla: Next sirve lo cacheado y regenera en

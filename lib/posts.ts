@@ -1,4 +1,4 @@
-import { POSTS_TAG, postTag } from "@/lib/cacheTags";
+import { POSTS_TAG } from "@/lib/cacheTags";
 import {
   listResponseSchema,
   postSchema,
@@ -40,15 +40,11 @@ export async function getPosts(): Promise<Post[]> {
   return posts;
 }
 
-/** Un post por slug, o null si no existe. Tags: "posts" y "post:<slug>". */
+/**
+ * Un post por slug, o null si no existe. Se resuelve contra la lista cacheada:
+ * un slug inexistente no consulta a Strapi (ni lo despierta).
+ */
 export async function getPostBySlug(slug: string): Promise<Post | null> {
-  const json = await strapiFetch(
-    `/api/posts?${postsQuery({
-      "filters[slug][$eq]": slug,
-      "pagination[pageSize]": "1",
-    })}`,
-    { tags: [POSTS_TAG, postTag(slug)] }
-  );
-  const parsed = parseStrapi(postListSchema, json, `GET /api/posts (slug=${slug})`);
-  return parsed.data[0] ?? null;
+  const posts = await getPosts();
+  return posts.find((post) => post.slug === slug) ?? null;
 }

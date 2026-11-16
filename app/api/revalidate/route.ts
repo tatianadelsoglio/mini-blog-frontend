@@ -6,16 +6,11 @@ import {
   ALL_TAGS,
   CATEGORIES_TAG,
   POSTS_TAG,
-  postTag,
 } from "@/lib/cacheTags";
 
 interface StrapiWebhookPayload {
   event?: string;
   model?: string;
-  entry?: {
-    documentId?: string;
-    slug?: string;
-  };
 }
 
 function isValidSecret(received: string | null): boolean {
@@ -27,11 +22,11 @@ function isValidSecret(received: string | null): boolean {
 }
 
 function getTagsToRevalidate(payload: StrapiWebhookPayload): string[] {
-  const slug = payload.entry?.slug;
-
   switch (payload.model) {
     case "post":
-      return slug ? [POSTS_TAG, postTag(slug)] : [POSTS_TAG];
+      // Todas las páginas de posts leen la lista cacheada (tag "posts"), así que
+      // cubre alta, edición, cambio de slug y baja.
+      return [POSTS_TAG];
     case "category":
       // Los posts incluyen el nombre de su categoría.
       return [CATEGORIES_TAG, POSTS_TAG];
