@@ -7,13 +7,13 @@ export default function NotFound() {
         No encontramos esta página
       </h1>
       <p className="font-body text-body text-text-secondary">
-        El post que buscás no existe o fue movido.
+        La página que buscás no existe o fue movida.
       </p>
       <Link
-        href="/"
+        href="/historias"
         className="font-body text-caption tracking-wide text-accent uppercase"
       >
-        ← Volver al inicio
+        ← Ver todas las historias
       </Link>
     </div>
   );
