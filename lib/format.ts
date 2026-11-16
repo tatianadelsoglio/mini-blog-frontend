@@ -7,15 +7,19 @@ export function getExcerpt(content: string, maxLength = 140): string {
   return `${plain.slice(0, maxLength).trimEnd()}…`;
 }
 
+const DATE_FORMATTER = new Intl.DateTimeFormat("es-AR", {
+  day: "2-digit",
+  month: "short",
+  year: "numeric",
+  timeZone: "America/Argentina/Buenos_Aires",
+});
+
+/** Fecha en horario de Argentina (el servidor suele estar en UTC). null si falta o es inválida. */
 export function formatDate(dateString?: string | null): string | null {
   if (!dateString) return null;
-  return new Date(dateString)
-    .toLocaleDateString("es-AR", {
-      day: "2-digit",
-      month: "short",
-      year: "numeric",
-    })
-    .toUpperCase();
+  const date = new Date(dateString);
+  if (Number.isNaN(date.getTime())) return null;
+  return DATE_FORMATTER.format(date).toUpperCase();
 }
 
 const WORDS_PER_MINUTE = 200;
