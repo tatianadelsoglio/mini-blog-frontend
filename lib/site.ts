@@ -1,4 +1,5 @@
 export const SITE_NAME = "Cuaderno";
+export const SITE_LOCALE = "es_AR";
 export const SITE_DESCRIPTION =
   "Historias breves para leer con calma. Notas, reflexiones y pequeños hallazgos de todos los días.";
 

@@ -4,7 +4,12 @@ import { PostContent } from "@/components/PostContent";
 import { getAbout } from "@/lib/about";
 import { getExcerpt } from "@/lib/format";
 import { getImageUrl } from "@/lib/images";
-import { DEFAULT_OG_IMAGE, SITE_DESCRIPTION } from "@/lib/site";
+import {
+  DEFAULT_OG_IMAGE,
+  SITE_DESCRIPTION,
+  SITE_LOCALE,
+  SITE_NAME,
+} from "@/lib/site";
 
 export async function generateMetadata(): Promise<Metadata> {
   const about = await getAbout();
@@ -14,10 +19,15 @@ export async function generateMetadata(): Promise<Metadata> {
   const photo = getImageUrl(about?.photo ?? null, "large");
 
   return {
-    title: about?.title ?? "Sobre",
+    // Título fijo: el template del layout agrega " | Cuaderno" y el título de
+    // About (editable en Strapi) queda para el H1 y Open Graph.
+    title: "Sobre",
     description,
     alternates: { canonical: "/sobre" },
     openGraph: {
+      type: "website",
+      siteName: SITE_NAME,
+      locale: SITE_LOCALE,
       title: about?.title ?? "Sobre",
       description,
       url: "/sobre",

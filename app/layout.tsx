@@ -2,7 +2,12 @@ import type { Metadata } from "next";
 import { Playfair_Display, Inter } from "next/font/google";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { getSiteUrl, SITE_DESCRIPTION, SITE_NAME } from "@/lib/site";
+import {
+  getSiteUrl,
+  SITE_DESCRIPTION,
+  SITE_LOCALE,
+  SITE_NAME,
+} from "@/lib/site";
 import "./globals.css";
 
 const playfairDisplay = Playfair_Display({
@@ -22,7 +27,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     siteName: SITE_NAME,
-    locale: "es_AR",
+    locale: SITE_LOCALE,
     title: SITE_NAME,
     description: SITE_DESCRIPTION,
   },

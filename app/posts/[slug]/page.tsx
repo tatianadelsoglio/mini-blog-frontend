@@ -10,7 +10,7 @@ import { formatDate, getPostSummary, getReadingTime } from "@/lib/format";
 import { getImageUrl } from "@/lib/images";
 import { getAdjacentPosts } from "@/lib/postNavigation";
 import { getPostBySlug, getPosts } from "@/lib/posts";
-import { DEFAULT_OG_IMAGE } from "@/lib/site";
+import { DEFAULT_OG_IMAGE, SITE_LOCALE, SITE_NAME } from "@/lib/site";
 
 // Se prerenderizan los posts conocidos en el build; uno nuevo se genera en la
 // primera visita y queda cacheado hasta que el webhook lo revalide.
@@ -35,6 +35,8 @@ export async function generateMetadata(
     alternates: { canonical: `/posts/${post.slug}` },
     openGraph: {
       type: "article",
+      siteName: SITE_NAME,
+      locale: SITE_LOCALE,
       title: post.title,
       description,
       url: `/posts/${post.slug}`,
