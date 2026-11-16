@@ -1,80 +1,54 @@
-export interface StrapiImageFormat {
-  url: string;
-  width: number;
-  height: number;
+import { POSTS_TAG, postTag } from "@/lib/cacheTags";
+import {
+  listResponseSchema,
+  postSchema,
+  type Post,
+} from "@/lib/schemas";
+import { parseStrapi, strapiFetch } from "@/lib/strapi";
+
+const PAGE_SIZE = 50;
+const postListSchema = listResponseSchema(postSchema);
+
+function postsQuery(extra: Record<string, string> = {}): string {
+  const params = new URLSearchParams({
+    "populate[0]": "coverImage",
+    "populate[1]": "category",
+    sort: "publishedAt:desc",
+    "pagination[pageSize]": String(PAGE_SIZE),
+    ...extra,
+  });
+  return params.toString();
 }
 
-export interface StrapiImage {
-  url: string;
-  width: number;
-  height: number;
-  alternativeText?: string | null;
-  formats?: {
-    thumbnail?: StrapiImageFormat;
-    small?: StrapiImageFormat;
-    medium?: StrapiImageFormat;
-    large?: StrapiImageFormat;
-  };
-}
-
-export interface Post {
-  id: number;
-  documentId: string;
-  title: string;
-  content: string;
-  publishedAt?: string;
-  coverImage: StrapiImage | null;
-}
-
+/** Todos los posts publicados, del más nuevo al más viejo. Cacheado con el tag "posts". */
 export async function getPosts(): Promise<Post[]> {
-  const res = await fetch(
-    `${process.env.STRAPI_URL}/api/posts?populate=coverImage`
+  const posts: Post[] = [];
+  let page = 1;
+  let pageCount = 1;
+
+  do {
+    const json = await strapiFetch(
+      `/api/posts?${postsQuery({ "pagination[page]": String(page) })}`,
+      { tags: [POSTS_TAG] }
+    );
+    const parsed = parseStrapi(postListSchema, json, "GET /api/posts");
+    posts.push(...parsed.data);
+    pageCount = parsed.meta.pagination.pageCount;
+    page += 1;
+  } while (page <= pageCount);
+
+  return posts;
+}
+
+/** Un post por slug, o null si no existe. Tags: "posts" y "post:<slug>". */
+export async function getPostBySlug(slug: string): Promise<Post | null> {
+  const json = await strapiFetch(
+    `/api/posts?${postsQuery({
+      "filters[slug][$eq]": slug,
+      "pagination[pageSize]": "1",
+    })}`,
+    { tags: [POSTS_TAG, postTag(slug)] }
   );
-  if (!res.ok) {
-    throw new Error("No se pudieron cargar los posts");
-  }
-  const json = await res.json();
-  return json.data;
-}
-
-export async function getPost(documentId: string): Promise<Post | null> {
-  const res = await fetch(
-    `${process.env.STRAPI_URL}/api/posts/${documentId}?populate=coverImage`
-  );
-  if (res.status === 404) {
-    return null;
-  }
-  if (!res.ok) {
-    throw new Error("No se pudo cargar el post");
-  }
-  const json = await res.json();
-  return json.data;
-}
-
-export function getImageUrl(
-  image: Post["coverImage"],
-  size: "thumbnail" | "small" | "medium" | "large" = "large"
-): string | null {
-  if (!image) return null;
-  const url = image.formats?.[size]?.url ?? image.url;
-  return url.startsWith("http")
-    ? url
-    : `${process.env.STRAPI_URL}${url}`;
-}
-
-export function getExcerpt(content: string, maxLength = 140): string {
-  const plain = content.replace(/[#*_`>~[\]]/g, "").trim();
-  if (plain.length <= maxLength) return plain;
-  return `${plain.slice(0, maxLength).trimEnd()}…`;
-}
-
-export function formatDate(dateString?: string): string | null {
-  if (!dateString) return null;
-  return new Date(dateString)
-    .toLocaleDateString("es-AR", {
-      day: "2-digit",
-      month: "short",
-      year: "numeric",
-    })
-    .toUpperCase();
+  const parsed = parseStrapi(postListSchema, json, `GET /api/posts (slug=${slug})`);
+  return parsed.data[0] ?? null;
 }
