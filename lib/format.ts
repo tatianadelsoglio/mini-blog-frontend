@@ -1,8 +1,18 @@
-const MARKDOWN_SYMBOLS = /[#*_`>~[\]]/g;
+// Símbolos de Markdown a quitar. El guion bajo solo se quita en límites de
+// palabra (_cursiva_), no dentro de ella (snake_case).
+const MARKDOWN_SYMBOLS = /[#*`>~[\]]|(?<![\p{L}\p{N}])_|_(?![\p{L}\p{N}])/gu;
+// ![alt](url) y [texto](url): se conserva solo el texto.
+const MARKDOWN_LINKS = /!?\[([^\]]*)\]\([^)]*\)/g;
+
+function stripMarkdown(content: string, replacement: string): string {
+  return content
+    .replace(MARKDOWN_LINKS, "$1")
+    .replace(MARKDOWN_SYMBOLS, replacement);
+}
 
 /** Texto plano corto a partir de markdown, para cuando el post no tiene excerpt. */
 export function getExcerpt(content: string, maxLength = 140): string {
-  const plain = content.replace(MARKDOWN_SYMBOLS, "").replace(/\s+/g, " ").trim();
+  const plain = stripMarkdown(content, "").replace(/\s+/g, " ").trim();
   if (plain.length <= maxLength) return plain;
   return `${plain.slice(0, maxLength).trimEnd()}…`;
 }
@@ -26,7 +36,7 @@ const WORDS_PER_MINUTE = 200;
 
 /** Minutos de lectura (mínimo 1) a ~200 palabras por minuto. */
 export function getReadingTime(content: string): number {
-  const words = content.replace(MARKDOWN_SYMBOLS, " ").split(/\s+/).filter(Boolean).length;
+  const words = stripMarkdown(content, " ").split(/\s+/).filter(Boolean).length;
   return Math.max(1, Math.ceil(words / WORDS_PER_MINUTE));
 }
 
