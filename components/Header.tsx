@@ -1,16 +1,29 @@
 import Link from "next/link";
+import { MobileMenu } from "@/components/MobileMenu";
 import { NavLinks } from "@/components/NavLinks";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 export function Header() {
   return (
-    <header className="flex flex-wrap items-center justify-between gap-x-6 gap-y-3 border-b border-border bg-bg px-6 py-6 sm:px-16">
-      <Link
-        href="/"
-        className="font-heading text-2xl font-semibold text-text-primary"
-      >
-        Cuaderno
-      </Link>
-      <NavLinks />
+    <header className="border-b border-border bg-bg">
+      <div className="mx-auto flex max-w-[calc(var(--container-content)+2*var(--spacing-4xl))] items-center justify-between px-lg py-snug lg:px-4xl lg:py-chip">
+        <Link
+          href="/"
+          className="flex min-h-touch items-center font-heading text-logo-mobile font-semibold text-text-primary lg:text-logo"
+        >
+          Cuaderno
+        </Link>
+
+        <div className="hidden items-center gap-md lg:flex">
+          <NavLinks />
+          <ThemeToggle className="border border-border" />
+        </div>
+
+        <div className="flex items-center gap-2xs lg:hidden">
+          <ThemeToggle />
+          <MobileMenu />
+        </div>
+      </div>
     </header>
   );
 }

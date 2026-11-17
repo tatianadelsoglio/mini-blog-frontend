@@ -316,3 +316,8 @@ body {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* Menú mobile abierto (<dialog> modal): el fondo no scrollea. */
+html:has(dialog[open]) {
+  overflow: hidden;
+}
