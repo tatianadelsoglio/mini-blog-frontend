@@ -8,6 +8,7 @@ import {
   SITE_LOCALE,
   SITE_NAME,
 } from "@/lib/site";
+import { THEME_INIT_SCRIPT } from "@/lib/theme";
 import "./globals.css";
 
 const playfairDisplay = Playfair_Display({
@@ -44,7 +45,12 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html
       lang="es"
       className={`${playfairDisplay.variable} ${inter.variable} ${jetbrainsMono.variable} h-full antialiased`}
+      // El script de tema fija data-theme antes de hidratar.
+      suppressHydrationWarning
     >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
+      </head>
       <body className="min-h-full flex flex-col font-body">
         <Header />
         <main className="flex-1">{children}</main>

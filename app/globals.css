@@ -25,6 +25,81 @@
   /* Cabecera del bloque de código: igual en ambos modos en el diseño. */
   --code-muted: #c9c2b4;
   --code-divider: #ffffff1a;
+
+  /* Paleta oscura (valor oscuro de cada token del .pen). */
+  --bg-dark: #1c1a17;
+  --bg-card-dark: #26231f;
+  --bg-inverse-dark: #ece6d8;
+  --bg-code-dark: #12110f;
+  --text-primary-dark: #ece6d8;
+  --text-secondary-dark: #b3aa9b;
+  --text-inverse-dark: #1c1a17;
+  --text-code-dark: #e4dccb;
+  --border-dark: #3a362f;
+  --border-strong-dark: #7a7266;
+  --accent-dark: #c9b07a;
+  --accent-hover-dark: #e0c994;
+  --accent-soft-dark: #3a3324;
+  --focus-dark: #e0c994;
+  --error-dark: #e59a8c;
+
+  color-scheme: light;
+}
+
+/*
+ * Modo oscuro: el script del <head> fija data-theme con la elección guardada
+ * o con prefers-color-scheme. Sin JS, se usa directamente la media query.
+ */
+:root[data-theme="dark"] {
+  --bg: var(--bg-dark);
+  --bg-card: var(--bg-card-dark);
+  --bg-inverse: var(--bg-inverse-dark);
+  --bg-code: var(--bg-code-dark);
+  --text-primary: var(--text-primary-dark);
+  --text-secondary: var(--text-secondary-dark);
+  --text-inverse: var(--text-inverse-dark);
+  --text-code: var(--text-code-dark);
+  --border: var(--border-dark);
+  --border-strong: var(--border-strong-dark);
+  --accent: var(--accent-dark);
+  --accent-hover: var(--accent-hover-dark);
+  --accent-soft: var(--accent-soft-dark);
+  --focus: var(--focus-dark);
+  --error: var(--error-dark);
+  color-scheme: dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    --bg: var(--bg-dark);
+    --bg-card: var(--bg-card-dark);
+    --bg-inverse: var(--bg-inverse-dark);
+    --bg-code: var(--bg-code-dark);
+    --text-primary: var(--text-primary-dark);
+    --text-secondary: var(--text-secondary-dark);
+    --text-inverse: var(--text-inverse-dark);
+    --text-code: var(--text-code-dark);
+    --border: var(--border-dark);
+    --border-strong: var(--border-strong-dark);
+    --accent: var(--accent-dark);
+    --accent-hover: var(--accent-hover-dark);
+    --accent-soft: var(--accent-soft-dark);
+    --focus: var(--focus-dark);
+    --error: var(--error-dark);
+    color-scheme: dark;
+  }
+}
+
+/* Variante dark: (para lo que no es un color, p. ej. el ícono de TAMADE). */
+@custom-variant dark {
+  &:where([data-theme="dark"], [data-theme="dark"] *) {
+    @slot;
+  }
+  @media (prefers-color-scheme: dark) {
+    &:where(:root:not([data-theme]), :root:not([data-theme]) *) {
+      @slot;
+    }
+  }
 }
 
 @theme inline {
