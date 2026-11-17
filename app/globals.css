@@ -263,6 +263,8 @@
   --spacing-switch-knob: 24px;
   --spacing-switch-height: 32px;
   --spacing-switch-width: 52px;
+  /* Recorrido de la perilla: 52 − 24 − 2 × 4 de padding. */
+  --spacing-switch-travel: 20px;
   --spacing-control: 48px;
   --spacing-topic-row: 64px;
   --spacing-status-icon: 64px;

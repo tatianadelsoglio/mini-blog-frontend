@@ -26,7 +26,7 @@ export function ThemeSwitch() {
       >
         <span
           className={`size-switch-knob rounded-full bg-bg transition-transform ${
-            checked ? "translate-x-[calc(var(--spacing-switch-width)-var(--spacing-switch-knob)-2*var(--spacing-2xs))]" : ""
+            checked ? "translate-x-switch-travel" : ""
           }`}
         />
       </span>
