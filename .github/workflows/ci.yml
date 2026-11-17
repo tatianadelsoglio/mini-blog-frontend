@@ -1,0 +1,38 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+# Un push nuevo a la misma rama cancela la corrida anterior.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+# Este workflow NO corre `next build` a propósito: el build pide los datos al
+# Strapi real (hosteado en Render Free), que duerme tras 15 min y tarda ~1 min
+# en despertar, así que el CI sería lento e inestable por algo ajeno al código.
+# Vercel ya buildea en cada deploy (y en cada preview de PR) contra el Strapi
+# real, y ahí es donde se detecta un build roto.
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          # Misma versión que el proyecto de Vercel (Node 24.x); ver .nvmrc.
+          node-version-file: .nvmrc
+          cache: npm
+
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm test
