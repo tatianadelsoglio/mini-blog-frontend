@@ -104,6 +104,9 @@ export function parseStrapi<T extends z.ZodType>(
   return result.data;
 }
 
+// Se loguea una vez por item y proceso, no en cada render.
+const warnedItems = new Set<string>();
+
 /**
  * Valida una lista de Strapi: el sobre es obligatorio (si falla, error), pero
  * un item inválido se descarta con un log en lugar de tumbar toda la lista.
@@ -130,7 +133,11 @@ export function parseStrapiList<T extends z.ZodType>(
       .slice(0, 3)
       .map((issue) => `${issue.path.join(".") || "(raíz)"}: ${issue.message}`)
       .join("; ");
-    console.warn(`[strapi] ${context}: item ${id} descartado (${detail})`);
+    const key = `${context}:${id}`;
+    if (!warnedItems.has(key)) {
+      warnedItems.add(key);
+      console.warn(`[strapi] ${context}: item ${id} descartado (${detail})`);
+    }
   });
 
   return { items, pagination: envelope.meta.pagination };
