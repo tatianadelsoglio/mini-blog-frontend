@@ -1,39 +1,243 @@
 @import "tailwindcss";
 
+/*
+ * Tokens de design/cuaderno.pen. Cada valor tiene su propio token, sin
+ * redondear ni unificar valores parecidos. Los colores viven en variables
+ * de :root (claro) y se redefinen para oscuro en el bloque de tema.
+ */
+
+:root {
+  --bg: #f5f2e9;
+  --bg-card: #efe9da;
+  --bg-inverse: #2d2926;
+  --bg-code: #2d2926;
+  --text-primary: #2d2926;
+  --text-secondary: #5e5954;
+  --text-inverse: #f5f2e9;
+  --text-code: #f5f2e9;
+  --border: #dcd8cb;
+  --border-strong: #8a8378;
+  --accent: #7d6b3d;
+  --accent-hover: #5c4f2b;
+  --accent-soft: #e7dfc8;
+  --focus: #5c4f2b;
+  --error: #9a3b2e;
+  /* Cabecera del bloque de código: igual en ambos modos en el diseño. */
+  --code-muted: #c9c2b4;
+  --code-divider: #ffffff1a;
+}
+
 @theme inline {
-  --color-bg: #f5f2e9;
-  --color-bg-card: #efe9da;
-  --color-bg-inverse: #2d2926;
-  --color-text-primary: #2d2926;
-  --color-text-secondary: #5e5954;
-  --color-text-inverse: #f5f2e9;
-  --color-border: #dcd8cb;
-  --color-accent: #7d6b3d;
-  --color-accent-hover: #5c4f2b;
+  --color-bg: var(--bg);
+  --color-bg-card: var(--bg-card);
+  --color-bg-inverse: var(--bg-inverse);
+  --color-bg-code: var(--bg-code);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-inverse: var(--text-inverse);
+  --color-text-code: var(--text-code);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-soft: var(--accent-soft);
+  --color-focus: var(--focus);
+  --color-error: var(--error);
+  --color-code-muted: var(--code-muted);
+  --color-code-divider: var(--code-divider);
 
   --font-heading: var(--font-playfair);
   --font-body: var(--font-inter);
+  --font-mono: var(--font-jetbrains-mono);
+}
 
+@theme {
+  /* Tipografía: tamaño / interlineado (y peso o tracking cuando el diseño lo fija). */
   --text-hero: 3.5rem;
   --text-hero--line-height: 1.15;
+  --text-hero-mobile: 2.25rem;
+  --text-hero-mobile--line-height: 1.15;
+  --text-post-title: 2.75rem;
+  --text-post-title--line-height: 1.2;
+  --text-post-title-mobile: 2rem;
+  --text-post-title-mobile--line-height: 1.2;
+  --text-poem-title: 2.5rem;
+  --text-poem-title--line-height: 1.2;
+  --text-featured-title: 2.25rem;
+  --text-featured-title--line-height: 1.2;
+  --text-featured-title-mobile: 1.75rem;
+  --text-featured-title-mobile--line-height: 1.2;
+  --text-status-code: 7.5rem;
+  --text-status-code--line-height: 1;
+  --text-status-code-mobile: 5.5rem;
+  --text-status-code-mobile--line-height: 1;
+  --text-status-title: 2.25rem;
+  --text-status-title--line-height: 1.25;
+  --text-status-title-mobile: 1.75rem;
+  --text-status-title-mobile--line-height: 1.25;
   --text-h2: 1.625rem;
   --text-h2--line-height: 1.3;
+  --text-h2-mobile: 1.5rem;
+  --text-h2-mobile--line-height: 1.3;
+  --text-topic-title: 1.5rem;
+  --text-topic-title--line-height: 1.3;
+  --text-card-title: 1.375rem;
+  --text-card-title--line-height: 1.3;
+  --text-card-title-mobile: 1.1875rem;
+  --text-card-title-mobile--line-height: 1.3;
   --text-h3: 1.25rem;
   --text-h3--line-height: 1.3;
+  --text-logo: 1.625rem;
+  --text-logo--line-height: 1.2;
+  --text-logo-mobile: 1.375rem;
+  --text-logo-mobile--line-height: 1.2;
+  --text-menu-link: 2rem;
+  --text-menu-link--line-height: 1.2;
+  --text-lead-post: 1.25rem;
+  --text-lead-post--line-height: 1.55;
+  --text-lead-mobile: 1.0625rem;
+  --text-lead-mobile--line-height: 1.55;
+  --text-lead-compact: 1rem;
+  --text-lead-compact--line-height: 1.55;
   --text-body-lg: 1.125rem;
   --text-body-lg--line-height: 1.5;
+  --text-reading: 1.125rem;
+  --text-reading--line-height: 1.75;
+  --text-featured-excerpt: 1.125rem;
+  --text-featured-excerpt--line-height: 1.6;
+  --text-quote: 1.5rem;
+  --text-quote--line-height: 1.45;
+  --text-quote-mobile: 1.3125rem;
+  --text-quote-mobile--line-height: 1.45;
+  --text-poem: 1.3125rem;
+  --text-poem--line-height: 1.9;
+  --text-poem-mobile: 1.1875rem;
+  --text-poem-mobile--line-height: 1.9;
+  --text-verse-preview: 1.3125rem;
+  --text-verse-preview--line-height: 1.7;
+  --text-verse-preview-mobile: 1.1875rem;
+  --text-verse-preview-mobile--line-height: 1.7;
   --text-body: 1rem;
   --text-body--line-height: 1.7;
+  --text-excerpt: 1rem;
+  --text-excerpt--line-height: 1.6;
+  --text-code-inline: 1rem;
+  --text-code-inline--line-height: 1.75;
+  --text-input: 0.9375rem;
+  --text-input--line-height: 1.4;
+  --text-code: 0.9375rem;
+  --text-code--line-height: 1.6;
+  --text-label: 0.875rem;
+  --text-label--line-height: 1.4;
   --text-caption: 0.8125rem;
   --text-caption--line-height: 1.4;
+  --text-figcaption: 0.8125rem;
+  --text-figcaption--line-height: 1.5;
+  --text-note: 0.75rem;
+  --text-note--line-height: 1.5;
+
+  --tracking-caps: 0.09375rem;
+  --tracking-brand: 0.0625rem;
+
+  /* Espaciado: escala del .pen y medidas fuera de escala usadas en las pantallas. */
+  --spacing-3xs: 2px;
+  --spacing-2xs: 4px;
+  --spacing-tight: 6px;
+  --spacing-xs: 8px;
+  --spacing-snug: 10px;
+  --spacing-sm: 12px;
+  --spacing-cozy: 14px;
+  --spacing-md: 16px;
+  --spacing-chip: 18px;
+  --spacing-roomy: 20px;
+  --spacing-airy: 22px;
+  --spacing-lg: 24px;
+  --spacing-relaxed: 28px;
+  --spacing-xl: 32px;
+  --spacing-loose: 36px;
+  --spacing-2xl: 40px;
+  --spacing-touch: 44px;
+  --spacing-3xl: 48px;
+  --spacing-section-sm: 56px;
+  --spacing-4xl: 64px;
+  --spacing-section-md: 72px;
+  --spacing-5xl: 80px;
+  --spacing-section-lg: 96px;
+  --spacing-6xl: 120px;
+  --spacing-section-xl: 160px;
+
+  /* Medidas de elementos (alto/ancho fijos del diseño). */
+  --spacing-marker: 6px;
+  --spacing-active-bar: 3px;
+  --spacing-active-bar-height: 28px;
+  --spacing-ornament: 48px;
+  --spacing-ornament-mobile: 40px;
+  --spacing-icon-xs: 14px;
+  --spacing-icon-sm: 16px;
+  --spacing-icon-md: 18px;
+  --spacing-icon-lg: 20px;
+  --spacing-icon-xl: 22px;
+  --spacing-icon-status: 26px;
+  --spacing-icon-error: 30px;
+  --spacing-switch-knob: 24px;
+  --spacing-switch-height: 32px;
+  --spacing-switch-width: 52px;
+  --spacing-control: 48px;
+  --spacing-topic-row: 64px;
+  --spacing-status-icon: 64px;
+  --spacing-error-icon: 72px;
+  --spacing-menu-link: 72px;
+  --spacing-card-cover: 240px;
+  --spacing-featured-cover-mobile: 240px;
+  --spacing-post-cover-mobile: 260px;
+  --spacing-about-photo-mobile: 380px;
+  --spacing-body-image: 400px;
+  --spacing-featured-cover: 460px;
+  --spacing-post-cover: 560px;
+  --spacing-about-photo: 560px;
+  --spacing-status-page: 620px;
+  --spacing-status-page-mobile: 560px;
+
+  /* Anchos máximos (max-w-*, w-*). */
+  --container-aside: 21.25rem;
+  --container-search: 22.5rem;
+  --container-poem-image: 22.5rem;
+  --container-about-photo: 27.5rem;
+  --container-poem: 32.5rem;
+  --container-status-text: 32.5rem;
+  --container-hero-lead: 33.75rem;
+  --container-about-text: 37.5rem;
+  --container-page-lead: 38.75rem;
+  --container-reading: 42.5rem;
+  --container-hero-title: 47.5rem;
+  --container-featured-cover: 47.5rem;
+  --container-post-head: 48.75rem;
+  --container-wide: 68.75rem;
+  --container-content: 82rem;
 
   --radius-sm: 4px;
   --radius-md: 10px;
-
-  --max-width-reading: 42.5rem;
+  --radius-full: 9999px;
 }
 
 body {
   background: var(--color-bg);
   color: var(--color-text-primary);
+}
+
+/* Foco visible: anillo de 2 px color-focus con 3 px de separación. */
+:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
 }

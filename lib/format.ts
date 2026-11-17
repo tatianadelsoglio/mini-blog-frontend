@@ -17,19 +17,42 @@ export function getExcerpt(content: string, maxLength = 140): string {
   return `${plain.slice(0, maxLength).trimEnd()}…`;
 }
 
-const DATE_FORMATTER = new Intl.DateTimeFormat("es-AR", {
-  day: "2-digit",
+const TIME_ZONE = "America/Argentina/Buenos_Aires";
+
+const SHORT_FORMATTER = new Intl.DateTimeFormat("es-AR", {
+  day: "numeric",
   month: "short",
   year: "numeric",
-  timeZone: "America/Argentina/Buenos_Aires",
+  timeZone: TIME_ZONE,
 });
 
-/** Fecha en horario de Argentina (el servidor suele estar en UTC). null si falta o es inválida. */
-export function formatDate(dateString?: string | null): string | null {
+const LONG_FORMATTER = new Intl.DateTimeFormat("es-AR", {
+  day: "numeric",
+  month: "long",
+  year: "numeric",
+  timeZone: TIME_ZONE,
+});
+
+function parseDate(dateString?: string | null): Date | null {
   if (!dateString) return null;
   const date = new Date(dateString);
-  if (Number.isNaN(date.getTime())) return null;
-  return DATE_FORMATTER.format(date).toUpperCase();
+  return Number.isNaN(date.getTime()) ? null : date;
+}
+
+/** "12 nov 2026" en horario de Argentina (el servidor suele estar en UTC). null si falta o es inválida. */
+export function formatDate(dateString?: string | null): string | null {
+  const date = parseDate(dateString);
+  if (!date) return null;
+  const parts = SHORT_FORMATTER.formatToParts(date);
+  const pick = (type: Intl.DateTimeFormatPartTypes) =>
+    parts.find((part) => part.type === type)?.value.replace(/\.$/, "") ?? "";
+  return `${pick("day")} ${pick("month")} ${pick("year")}`;
+}
+
+/** "12 de noviembre de 2026" en horario de Argentina. null si falta o es inválida. */
+export function formatDateLong(dateString?: string | null): string | null {
+  const date = parseDate(dateString);
+  return date ? LONG_FORMATTER.format(date) : null;
 }
 
 const WORDS_PER_MINUTE = 200;
