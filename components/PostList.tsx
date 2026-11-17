@@ -1,24 +1,14 @@
 import type { Post } from "@/lib/schemas";
 import { PostCard } from "@/components/PostCard";
 
-export function PostList({
-  posts,
-  emptyMessage = "Todavía no hay posts publicados.",
-}: {
-  posts: Post[];
-  emptyMessage?: string;
-}) {
-  if (posts.length === 0) {
-    return (
-      <p className="font-body text-body text-text-secondary">{emptyMessage}</p>
-    );
-  }
-
+export function PostList({ posts }: { posts: Post[] }) {
   return (
-    <div className="grid grid-cols-1 gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
+    <ul className="grid grid-cols-1 gap-x-xl gap-y-3xl md:grid-cols-2 lg:grid-cols-3 lg:gap-y-3xl">
       {posts.map((post) => (
-        <PostCard key={post.id} post={post} />
+        <li key={post.id}>
+          <PostCard post={post} />
+        </li>
       ))}
-    </div>
+    </ul>
   );
 }

@@ -1,46 +1,64 @@
 import Image from "next/image";
 import Link from "next/link";
-import type { Post } from "@/lib/schemas";
-import { formatDate, getPostSummary } from "@/lib/format";
+import { buttonVariants } from "@/components/buttonStyles";
+import { ArrowRightIcon } from "@/components/icons";
+import { PostMeta } from "@/components/PostMeta";
+import { formatDate, getPostSummary, getReadingTime } from "@/lib/format";
 import { getImageUrl } from "@/lib/images";
+import type { Post } from "@/lib/schemas";
 
 export function FeaturedPost({ post }: { post: Post }) {
-  const date = formatDate(post.publishedAt);
   const imageUrl = getImageUrl(post.coverImage, "large");
+  const href = `/posts/${post.slug}`;
+  const date = formatDate(post.publishedAt);
 
   return (
-    <Link
-      href={`/posts/${post.slug}`}
-      className="group grid grid-cols-1 gap-8 md:grid-cols-2 md:items-center"
-    >
-      <div className="relative h-72 w-full overflow-hidden rounded-md bg-bg-card transition-colors group-hover:bg-border md:h-96">
+    <article className="flex flex-col gap-cozy lg:flex-row lg:items-center lg:gap-section-sm">
+      <div className="relative h-featured-cover-mobile w-full shrink-0 overflow-hidden rounded-md bg-bg-card lg:h-featured-cover lg:w-1/2 xl:w-featured-cover">
         {imageUrl && (
           <Image
             src={imageUrl}
-            alt={post.coverImage?.alternativeText || post.title}
+            alt={post.coverImage?.alternativeText || ""}
             fill
-            sizes="(min-width: 768px) 50vw, 100vw"
+            sizes="(min-width: 1280px) 760px, (min-width: 1024px) 50vw, 100vw"
             className="object-cover"
-            priority
+            fetchPriority="high"
+            loading="eager"
           />
         )}
       </div>
-      <div className="flex flex-col gap-3">
-        <span className="font-body text-caption tracking-wide text-accent uppercase">
-          Destacado{post.category ? ` · ${post.category.name}` : ""}
-        </span>
-        <h2 className="font-heading text-h2 font-semibold text-text-primary">
-          {post.title}
+
+      <div className="flex flex-1 flex-col gap-cozy lg:gap-md">
+        <PostMeta
+          className="gap-xs pt-tight lg:pt-0"
+          items={[
+            { key: "badge", content: "Destacado", emphasis: "primary" },
+            { key: "category", content: post.category?.name, emphasis: "accent" },
+          ]}
+        />
+        <h2 className="font-heading text-featured-title-mobile font-semibold text-text-primary lg:text-featured-title">
+          <Link href={href} className="hover:text-accent-hover">
+            {post.title}
+          </Link>
         </h2>
-        <p className="font-body text-body text-text-secondary">
+        <p className="font-body text-excerpt text-text-secondary lg:text-featured-excerpt">
           {getPostSummary(post, 220)}
         </p>
-        {date && (
-          <span className="font-body text-caption text-text-secondary">
-            {date}
-          </span>
-        )}
+        <p className="font-body text-caption text-text-secondary">
+          {[date, `${getReadingTime(post.content)} min de lectura`]
+            .filter(Boolean)
+            .join(" · ")}
+        </p>
+        <div>
+          <Link
+            href={href}
+            className={`${buttonVariants.primary} w-full lg:w-auto`}
+          >
+            Leer la historia
+            <ArrowRightIcon className="size-icon-sm" />
+          </Link>
+        </div>
       </div>
-    </Link>
+    </article>
   );
 }

@@ -58,14 +58,15 @@ export default async function HistoriasPage(props: PageProps<"/historias">) {
         q={filters.q}
       />
 
-      <PostList
-        posts={items}
-        emptyMessage={
-          hasFilters
+      {items.length > 0 ? (
+        <PostList posts={items} />
+      ) : (
+        <p className="font-body text-body text-text-secondary">
+          {hasFilters
             ? "No encontramos historias con esos filtros."
-            : "Todavía no hay posts publicados."
-        }
-      />
+            : "Todavía no hay posts publicados."}
+        </p>
+      )}
 
       <Pagination page={page} pageCount={pageCount} filters={filters} />
     </div>

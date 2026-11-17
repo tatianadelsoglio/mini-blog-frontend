@@ -6,7 +6,7 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 export function Header() {
   return (
     <header className="border-b border-border bg-bg">
-      <div className="mx-auto flex max-w-[calc(var(--container-content)+2*var(--spacing-4xl))] items-center justify-between px-lg py-snug lg:px-4xl lg:py-chip">
+      <div className="mx-auto flex max-w-page items-center justify-between px-lg py-snug lg:px-4xl lg:py-chip">
         <Link
           href="/"
           className="flex min-h-touch items-center font-heading text-logo-mobile font-semibold text-text-primary lg:text-logo"

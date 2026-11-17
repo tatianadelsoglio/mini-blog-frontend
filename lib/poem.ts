@@ -46,3 +46,16 @@ export function parseInline(line: string): PoemSegment[] {
 export function isStanzaBreak(stanza: string): boolean {
   return /^\s*(?:(?:\*\s*){3,}|(?:-\s*){3,})$/.test(stanza);
 }
+
+/**
+ * Primeros versos de un poema (por defecto 3, o todos si tiene menos), sin
+ * líneas en blanco ni separadores. Conserva la sangría inicial de cada verso.
+ */
+export function getPoemPreview(content: string, maxLines = 3): string[] {
+  return content
+    .replace(/\r\n?/g, "\n")
+    .split("\n")
+    .map((line) => line.trimEnd())
+    .filter((line) => line.trim().length > 0 && !isStanzaBreak(line))
+    .slice(0, maxLines);
+}
