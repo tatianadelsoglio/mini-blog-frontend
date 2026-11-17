@@ -302,9 +302,24 @@ body {
 }
 
 /* Foco visible: anillo de 2 px color-focus con 3 px de separación. */
+:root {
+  --focus-ring-width: 2px;
+  --focus-ring-offset: 3px;
+}
+
 :where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
-  outline: 2px solid var(--color-focus);
-  outline-offset: 3px;
+  outline: var(--focus-ring-width) solid var(--color-focus);
+  outline-offset: var(--focus-ring-offset);
+}
+
+/* Campos con ícono (buscador): el anillo va en el contenedor, no en el input. */
+.focus-ring-within:focus-within {
+  outline: var(--focus-ring-width) solid var(--color-focus);
+  outline-offset: var(--focus-ring-offset);
+}
+
+.focus-ring-within :focus-visible {
+  outline: none;
 }
 
 @media (prefers-reduced-motion: reduce) {

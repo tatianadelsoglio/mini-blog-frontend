@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { ArrowLeftIcon, ArrowRightIcon } from "@/components/icons";
+import { getPageSlots } from "@/lib/pagination";
 import { buildHistoriasHref, type HistoriasParams } from "@/lib/postFilters";
 
 interface PaginationProps {
@@ -7,51 +9,102 @@ interface PaginationProps {
   filters: Pick<HistoriasParams, "categoria" | "q">;
 }
 
-const linkClass =
-  "rounded-md border border-border px-4 py-2 font-body text-caption tracking-wide uppercase transition-colors";
+const stepBase =
+  "inline-flex h-touch items-center gap-tight rounded-sm px-sm font-body text-label font-medium text-text-primary";
+const pageBase =
+  "inline-flex size-touch items-center justify-center rounded-sm font-body text-label font-medium";
+const mobileStep =
+  "inline-flex size-touch items-center justify-center rounded-sm border text-text-primary";
 
 export function Pagination({ page, pageCount, filters }: PaginationProps) {
   if (pageCount <= 1) return null;
 
-  const pages = Array.from({ length: pageCount }, (_, i) => i + 1);
+  const href = (target: number) => buildHistoriasHref({ ...filters, pagina: target });
+  const hasPrev = page > 1;
+  const hasNext = page < pageCount;
 
   return (
-    <nav
-      aria-label="Paginación"
-      className="flex flex-wrap items-center justify-center gap-2"
-    >
-      {page > 1 && (
-        <Link
-          href={buildHistoriasHref({ ...filters, pagina: page - 1 })}
-          rel="prev"
-          className={`${linkClass} text-text-secondary hover:border-accent`}
-        >
-          ← Anterior
-        </Link>
-      )}
-      {pages.map((n) => (
-        <Link
-          key={n}
-          href={buildHistoriasHref({ ...filters, pagina: n })}
-          aria-current={n === page ? "page" : undefined}
-          className={`${linkClass} ${
-            n === page
-              ? "border-accent bg-accent text-text-inverse"
-              : "text-text-secondary hover:border-accent"
-          }`}
-        >
-          {n}
-        </Link>
-      ))}
-      {page < pageCount && (
-        <Link
-          href={buildHistoriasHref({ ...filters, pagina: page + 1 })}
-          rel="next"
-          className={`${linkClass} text-text-secondary hover:border-accent`}
-        >
-          Siguiente →
-        </Link>
-      )}
+    <nav aria-label="Paginación" className="border-t border-border pt-lg lg:pt-xl">
+      {/* Desktop: Anterior · páginas · Siguiente */}
+      <ul className="hidden items-center justify-center gap-2xs lg:flex">
+        <li>
+          {hasPrev ? (
+            <Link href={href(page - 1)} rel="prev" className={`${stepBase} hover:bg-bg-card`}>
+              <ArrowLeftIcon className="size-icon-sm" />
+              Anterior
+            </Link>
+          ) : (
+            <span aria-disabled="true" className={`${stepBase} opacity-40`}>
+              <ArrowLeftIcon className="size-icon-sm" />
+              Anterior
+            </span>
+          )}
+        </li>
+        {getPageSlots(page, pageCount).map((slot, index) =>
+          slot === "ellipsis" ? (
+            <li key={`ellipsis-${index}`} aria-hidden="true" className={`${pageBase} text-text-secondary`}>
+              …
+            </li>
+          ) : (
+            <li key={slot}>
+              <Link
+                href={href(slot)}
+                aria-current={slot === page ? "page" : undefined}
+                aria-label={`Página ${slot}`}
+                className={`${pageBase} ${
+                  slot === page
+                    ? "bg-bg-inverse text-text-inverse"
+                    : "text-text-primary hover:bg-bg-card"
+                }`}
+              >
+                {slot}
+              </Link>
+            </li>
+          )
+        )}
+        <li>
+          {hasNext ? (
+            <Link href={href(page + 1)} rel="next" className={`${stepBase} hover:bg-bg-card`}>
+              Siguiente
+              <ArrowRightIcon className="size-icon-sm" />
+            </Link>
+          ) : (
+            <span aria-disabled="true" className={`${stepBase} opacity-40`}>
+              Siguiente
+              <ArrowRightIcon className="size-icon-sm" />
+            </span>
+          )}
+        </li>
+      </ul>
+
+      {/* Mobile: ← Página N de M → */}
+      <div className="flex items-center justify-between lg:hidden">
+        {hasPrev ? (
+          <Link href={href(page - 1)} rel="prev" className={`${mobileStep} border-border-strong`}>
+            <ArrowLeftIcon className="size-icon-sm" />
+            <span className="sr-only">Página anterior</span>
+          </Link>
+        ) : (
+          <span aria-disabled="true" className={`${mobileStep} border-border opacity-40`}>
+            <ArrowLeftIcon className="size-icon-sm" />
+            <span className="sr-only">Página anterior</span>
+          </span>
+        )}
+        <p className="font-body text-label font-medium text-text-primary">
+          Página {page} de {pageCount}
+        </p>
+        {hasNext ? (
+          <Link href={href(page + 1)} rel="next" className={`${mobileStep} border-border-strong`}>
+            <ArrowRightIcon className="size-icon-sm" />
+            <span className="sr-only">Página siguiente</span>
+          </Link>
+        ) : (
+          <span aria-disabled="true" className={`${mobileStep} border-border opacity-40`}>
+            <ArrowRightIcon className="size-icon-sm" />
+            <span className="sr-only">Página siguiente</span>
+          </span>
+        )}
+      </div>
     </nav>
   );
 }
