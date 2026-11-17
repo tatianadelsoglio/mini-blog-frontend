@@ -71,7 +71,7 @@ export default async function SobrePage() {
       className={`${pageX} flex flex-col gap-roomy pt-2xl pb-4xl lg:flex-row lg:items-start lg:justify-center lg:gap-section-lg lg:pt-section-lg lg:pb-6xl`}
     >
       {photoUrl && (
-        <figure className="relative h-about-photo-mobile w-full shrink-0 overflow-hidden rounded-md bg-bg-card lg:h-about-photo lg:w-2/5 xl:w-about-photo">
+        <figure className="relative h-about-photo-height-mobile w-full shrink-0 overflow-hidden rounded-md bg-bg-card lg:h-about-photo-height lg:w-2/5 xl:w-about-photo">
           <Image
             src={photoUrl}
             alt={about.photo?.alternativeText || ""}

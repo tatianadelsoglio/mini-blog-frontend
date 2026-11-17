@@ -241,7 +241,11 @@
   --spacing-6xl: 120px;
   --spacing-section-xl: 160px;
 
-  /* Medidas de elementos (alto/ancho fijos del diseño). */
+  /*
+   * Medidas de elementos (alto/ancho fijos del diseño). Los altos llevan
+   * sufijo -height para no compartir nombre con un --container-* (w-* usaría
+   * el --spacing-* y no el ancho).
+   */
   --spacing-marker: 6px;
   /* Sangría francesa de los versos largos (nota del .pen: 1em). */
   --spacing-verse-hang: 1em;
@@ -265,13 +269,13 @@
   --spacing-error-icon: 72px;
   --spacing-menu-link: 72px;
   --spacing-card-cover: 240px;
-  --spacing-featured-cover-mobile: 240px;
+  --spacing-featured-cover-height-mobile: 240px;
   --spacing-post-cover-mobile: 260px;
-  --spacing-about-photo-mobile: 380px;
+  --spacing-about-photo-height-mobile: 380px;
   --spacing-body-image: 400px;
-  --spacing-featured-cover: 460px;
+  --spacing-featured-cover-height: 460px;
   --spacing-post-cover: 560px;
-  --spacing-about-photo: 560px;
+  --spacing-about-photo-height: 560px;
   --spacing-status-page: 620px;
   --spacing-status-page-mobile: 560px;
 

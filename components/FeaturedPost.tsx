@@ -14,7 +14,7 @@ export function FeaturedPost({ post }: { post: Post }) {
 
   return (
     <article className="flex flex-col gap-cozy lg:flex-row lg:items-center lg:gap-section-sm">
-      <div className="relative h-featured-cover-mobile w-full shrink-0 overflow-hidden rounded-md bg-bg-card lg:h-featured-cover lg:w-1/2 xl:w-featured-cover">
+      <div className="relative h-featured-cover-height-mobile w-full shrink-0 overflow-hidden rounded-md bg-bg-card lg:h-featured-cover-height lg:w-1/2 xl:w-featured-cover">
         {imageUrl && (
           <Image
             src={imageUrl}
