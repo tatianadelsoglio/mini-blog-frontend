@@ -15,10 +15,10 @@ export function PostCard({ post }: { post: Post }) {
   return (
     <article className="group relative flex flex-col gap-md">
       {isPoem ? (
-        <div className="flex h-card-cover flex-col justify-center rounded-md bg-accent-soft px-2xl">
+        <div className="flex h-card-cover flex-col justify-center overflow-hidden rounded-md bg-accent-soft px-2xl">
           <VersePreview
             content={post.content}
-            className="text-verse-preview text-text-primary"
+            className="line-clamp-5 text-verse-preview-mobile text-text-primary lg:text-verse-preview"
           />
         </div>
       ) : (

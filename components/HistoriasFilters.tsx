@@ -56,7 +56,7 @@ export function HistoriasFilters({
             <li>
               <Link
                 href={buildHistoriasHref({ q })}
-                aria-current={!categoria ? "page" : undefined}
+                aria-current={!categoria ? "true" : undefined}
                 className={`${chipBase} ${!categoria ? chipActive : chipIdle}`}
               >
                 Todas
@@ -68,7 +68,7 @@ export function HistoriasFilters({
                 <li key={category.id}>
                   <Link
                     href={buildHistoriasHref({ categoria: category.slug, q })}
-                    aria-current={active ? "page" : undefined}
+                    aria-current={active ? "true" : undefined}
                     className={`${chipBase} ${active ? chipActive : chipIdle}`}
                   >
                     {category.name}

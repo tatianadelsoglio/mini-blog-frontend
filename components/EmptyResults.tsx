@@ -17,7 +17,9 @@ export function EmptyResults({ q, categoria, categoryName }: EmptyResultsProps) 
     ? `No encontramos historias para “${q}”`
     : categoryName
       ? `Todavía no hay historias en ${categoryName}`
-      : "Todavía no hay historias publicadas";
+      : categoria
+        ? "No encontramos esa categoría"
+        : "Todavía no hay historias publicadas";
 
   return (
     <div className="flex flex-col items-center gap-roomy pt-4xl pb-section-lg text-center lg:pb-section-xl">
@@ -30,8 +32,9 @@ export function EmptyResults({ q, categoria, categoryName }: EmptyResultsProps) 
       {hasFilters && (
         <>
           <p className="font-body text-body text-text-secondary">
-            Probá con otra palabra, revisá la ortografía o mirá todas las
-            categorías.
+            {q
+              ? "Probá con otra palabra, revisá la ortografía o mirá todas las categorías."
+              : "Mirá todas las categorías."}
           </p>
           <div className="pt-sm">
             <Link

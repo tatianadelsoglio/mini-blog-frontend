@@ -82,7 +82,10 @@ export default async function HistoriasPage(props: PageProps<"/historias">) {
         />
       </div>
 
-      <section aria-label="Resultados" className="border-t border-border">
+      <section aria-labelledby="resultados" className="border-t border-border">
+        <h2 id="resultados" className="sr-only">
+          Resultados
+        </h2>
         <div
           className={`${pageX} flex flex-col gap-touch pt-lg pb-section-sm lg:gap-3xl lg:pt-xl lg:pb-section-lg`}
         >

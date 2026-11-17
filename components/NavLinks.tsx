@@ -17,7 +17,7 @@ export function NavLinks() {
               <Link
                 href={href}
                 aria-current={active ? "page" : undefined}
-                className="group flex h-touch items-center justify-center rounded-sm px-sm"
+                className="group flex min-h-touch items-center justify-center rounded-sm px-sm"
               >
                 <span
                   className={`border-b-2 pt-cozy pb-sm font-body text-caption font-medium tracking-caps uppercase transition-colors ${

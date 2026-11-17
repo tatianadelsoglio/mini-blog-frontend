@@ -26,16 +26,16 @@ export function CategoryGrid({
           <li key={category.id}>
             <Link
               href={href(category.slug)}
-              className="flex h-topic-row items-center justify-between gap-md border-b border-text-primary"
+              className="flex min-h-topic-row items-center justify-between gap-md border-b border-text-primary py-xs"
             >
-              <span className="flex flex-col gap-3xs">
-                <span className="font-heading text-h3 font-semibold text-text-primary">
+              <div className="flex flex-col gap-3xs">
+                <h3 className="font-heading text-h3 font-semibold text-text-primary">
                   {category.name}
-                </span>
+                </h3>
                 <span className="font-body text-note text-accent-hover">
                   {countLabel(category)}
                 </span>
-              </span>
+              </div>
               <ArrowUpRightIcon className="size-icon-lg shrink-0 text-accent-hover" />
             </Link>
           </li>

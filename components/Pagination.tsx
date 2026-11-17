@@ -34,7 +34,7 @@ export function Pagination({ page, pageCount, filters }: PaginationProps) {
               Anterior
             </Link>
           ) : (
-            <span aria-disabled="true" className={`${stepBase} opacity-40`}>
+            <span aria-hidden="true" className={`${stepBase} opacity-40`}>
               <ArrowLeftIcon className="size-icon-sm" />
               Anterior
             </span>
@@ -69,7 +69,7 @@ export function Pagination({ page, pageCount, filters }: PaginationProps) {
               <ArrowRightIcon className="size-icon-sm" />
             </Link>
           ) : (
-            <span aria-disabled="true" className={`${stepBase} opacity-40`}>
+            <span aria-hidden="true" className={`${stepBase} opacity-40`}>
               Siguiente
               <ArrowRightIcon className="size-icon-sm" />
             </span>
@@ -85,7 +85,7 @@ export function Pagination({ page, pageCount, filters }: PaginationProps) {
             <span className="sr-only">Página anterior</span>
           </Link>
         ) : (
-          <span aria-disabled="true" className={`${mobileStep} border-border opacity-40`}>
+          <span aria-hidden="true" className={`${mobileStep} border-border opacity-40`}>
             <ArrowLeftIcon className="size-icon-sm" />
             <span className="sr-only">Página anterior</span>
           </span>
@@ -99,7 +99,7 @@ export function Pagination({ page, pageCount, filters }: PaginationProps) {
             <span className="sr-only">Página siguiente</span>
           </Link>
         ) : (
-          <span aria-disabled="true" className={`${mobileStep} border-border opacity-40`}>
+          <span aria-hidden="true" className={`${mobileStep} border-border opacity-40`}>
             <ArrowRightIcon className="size-icon-sm" />
             <span className="sr-only">Página siguiente</span>
           </span>
