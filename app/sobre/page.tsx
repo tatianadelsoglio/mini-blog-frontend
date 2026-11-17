@@ -47,9 +47,6 @@ export default async function SobrePage() {
   if (!about) {
     return (
       <div className={`${pageX} flex flex-col gap-roomy pt-2xl pb-4xl lg:gap-lg lg:pt-section-lg lg:pb-6xl`}>
-        <p className="font-body text-caption font-medium tracking-caps text-accent uppercase">
-          Sobre
-        </p>
         <h1 className="font-heading text-hero-mobile font-semibold text-text-primary lg:text-hero">
           Sobre
         </h1>
@@ -74,7 +71,7 @@ export default async function SobrePage() {
         <figure className="relative h-about-photo-height-mobile w-full shrink-0 overflow-hidden rounded-md bg-bg-card lg:h-about-photo-height lg:w-2/5 xl:w-about-photo">
           <Image
             src={photoUrl}
-            alt={about.photo?.alternativeText || ""}
+            alt={about.photo?.alternativeText || `Foto de ${AUTHOR_NAME}`}
             fill
             sizes="(min-width: 1280px) 440px, (min-width: 1024px) 40vw, 100vw"
             className="object-cover"

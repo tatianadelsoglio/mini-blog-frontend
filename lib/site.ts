@@ -25,3 +25,6 @@ export const DEFAULT_OG_IMAGE = {
  * todavía no tiene un campo de nombre; cuando lo tenga, debería salir de ahí.
  */
 export const AUTHOR_NAME = "Tatiana";
+
+/** Firma del footer (copy del diseño). */
+export const AUTHOR_FULL_NAME = "Tatiana Delsoglio";

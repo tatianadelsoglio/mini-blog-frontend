@@ -9,7 +9,5 @@ export const buttonVariants = {
   secondary: `${buttonBase} border border-border-strong text-text-primary hover:bg-bg-card`,
 } as const;
 
-export type ButtonVariant = keyof typeof buttonVariants;
-
 export const textLinkClass =
   "inline-flex min-h-touch items-center gap-xs font-body text-label font-medium text-accent transition-colors hover:text-accent-hover";

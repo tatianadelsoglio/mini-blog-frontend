@@ -4,14 +4,12 @@ export interface MetaItem {
   key: string;
   content: ReactNode;
   /** Categoría o etiqueta: mayúsculas con tracking. */
-  emphasis?: "accent" | "accent-strong" | "primary";
+  emphasis?: "accent" | "primary";
   className?: string;
 }
 
 const emphasisClass = {
   accent: "font-medium tracking-caps text-accent uppercase",
-  // Sobre bg-card el acento no llega a AA: se usa accent-hover.
-  "accent-strong": "font-medium tracking-caps text-accent-hover uppercase",
   primary: "font-medium tracking-caps text-text-primary uppercase",
 };
 

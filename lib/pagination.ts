@@ -2,7 +2,8 @@ export type PageSlot = number | "ellipsis";
 
 /**
  * Páginas a mostrar: la primera, la última y una ventana de 3 alrededor de la
- * actual, con "…" cuando se saltean dos o más (1 2 3 … 5, 1 … 4 5 6 … 9).
+ * actual, con "…" cuando se saltean dos o más (1 2 3 … 8, 1 … 4 5 6 … 9). Si
+ * se saltea una sola, se muestra esa página en vez de "…" (1 2 3 4 5).
  */
 export function getPageSlots(current: number, pageCount: number): PageSlot[] {
   if (pageCount <= 1) return [1];

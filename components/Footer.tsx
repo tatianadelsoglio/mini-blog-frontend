@@ -2,7 +2,7 @@ import Image from "next/image";
 import { GitHubIcon, LinkedInIcon } from "@/components/icons";
 import { getAbout } from "@/lib/about";
 import type { About } from "@/lib/schemas";
-import { AUTHOR_NAME } from "@/lib/site";
+import { AUTHOR_FULL_NAME, AUTHOR_NAME } from "@/lib/site";
 
 async function getAboutSafely(): Promise<About | null> {
   try {
@@ -58,10 +58,10 @@ export async function Footer() {
         <p className="flex flex-col items-center gap-tight text-center font-body text-caption text-text-secondary lg:flex-row lg:gap-xs">
           <span>
             © {year} Cuaderno · Diseñado y desarrollado por
-            <span className="hidden lg:inline"> Tatiana Delsoglio ·</span>
+            <span className="hidden lg:inline"> {AUTHOR_FULL_NAME} ·</span>
           </span>
           <span className="flex items-center gap-xs">
-            <span className="lg:hidden">Tatiana Delsoglio ·</span>
+            <span className="lg:hidden">{AUTHOR_FULL_NAME} ·</span>
             <span className="flex items-center gap-tight">
               <span className="font-medium tracking-brand">TAMADE</span>
               <Image
