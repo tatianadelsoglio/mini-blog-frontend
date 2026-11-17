@@ -2,7 +2,7 @@
 
 # Cuaderno
 
-Un sitio de lectura de historias breves, notas y poemas: Next.js 16 sobre un backend Strapi headless que se duerme en un plan gratuito, pensado para que los lectores casi nunca lo noten.
+Un sitio de lectura de notas de tecnología, ensayos y poemas: Next.js 16 sobre un backend Strapi headless que se duerme en un plan gratuito, pensado para que los lectores casi nunca lo noten.
 
 **Stack:** Next.js 16 · React 19 · TypeScript · Tailwind CSS 4 · Strapi 5 · Supabase · Vercel · Vitest
 
@@ -12,7 +12,7 @@ Un sitio de lectura de historias breves, notas y poemas: Next.js 16 sobre un bac
 
 ## Por qué este proyecto
 
-Cuaderno es un blog personal y un proyecto de portfolio: un CMS donde escribo, un diseño propio y un hosting en planes gratuitos. La restricción interesante es que el plan gratuito de Render duerme a Strapi tras 15 minutos y tarda alrededor de un minuto en despertarlo. La arquitectura gira en torno a eso: Vercel sirve páginas y datos cacheados, así que los lectores casi nunca dependen de que el backend esté despierto, y Strapi solo tiene que estar despierto cuando publico.
+Empecé Cuaderno como un proyecto de práctica para aprender a deployar un stack completo de punta a punta, y lo retomé para convertirlo en algo que uso de verdad: un lugar para mis notas de tecnología, ensayos y poemas. Strapi es parte de mi stack de todos los días, así que quería un proyecto que lo muestre funcionando en producción, más allá de un tutorial. La restricción interesante es que el plan gratuito de Render duerme a Strapi a los 15 minutos y tarda alrededor de un minuto en despertarlo, así que la arquitectura está pensada alrededor de eso: Vercel sirve páginas y datos en caché, los lectores casi nunca dependen de que el backend esté despierto, y Strapi solo necesita estar despierto cuando publico.
 
 ## Funcionalidades
 
@@ -31,7 +31,7 @@ flowchart LR
   vercel["Vercel<br/>Next.js 16, páginas y datos cacheados"]
   strapi["Strapi en Render<br/>se duerme tras 15 min"]
   supabase[("Supabase<br/>Postgres + Storage")]
-  actions["GitHub Actions<br/>ping cada 3 días aprox."]
+  actions["GitHub Actions<br/>ping cada 3 días aprox.<br/>mantiene activo a Supabase"]
 
   lectores -->|"leer, buscar, filtrar"| vercel
   vercel -->|"fetch, cacheado por tag"| strapi
@@ -45,7 +45,7 @@ flowchart LR
 
 A Strapi se lo consulta solo cuando la caché está vacía o vencida: en el build, después de que el webhook invalida un tag, o cuando se cumple la revalidación de respaldo de 7 días (se sirven datos viejos mientras se regenera en segundo plano). El webhook se dispara cuando publico, que es cuando Strapi está despierto porque lo estoy usando.
 
-Un workflow de GitHub Actions del repo del backend consulta a Strapi cada 3 días, aproximadamente, para que Render y el proyecto de Supabase no pasen mucho tiempo inactivos. El único caso en que un lector podría esperar (la primera visita después de una publicación) está descrito en Limitaciones.
+Un workflow de GitHub Actions del repo del backend consulta a Strapi cada 3 días, aproximadamente. Ese pedido no mantiene despierto a Render (se duerme igual a los 15 minutos); sirve para ejecutar una consulta real contra Supabase y que el proyecto no se pause por inactividad. El único caso en que un lector podría esperar (la primera visita después de una publicación) está descrito en Limitaciones.
 
 ## Decisiones técnicas
 
@@ -124,5 +124,5 @@ Las pantallas están diseñadas en pen.dev: [`design/cuaderno.pen`](design/cuade
 
 ## Autora
 
-Diseño y desarrollo: **Tatiana Delsoglio** · TAMADE, desarrolladora fullstack.
+Diseño y desarrollo: **Tatiana Delsoglio**, desarrolladora fullstack · TAMADE
 [GitHub](https://github.com/tatianadelsoglio) · [LinkedIn](https://www.linkedin.com/in/tatiana-delsoglio/)
