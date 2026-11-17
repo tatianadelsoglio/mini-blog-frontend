@@ -4,7 +4,10 @@ import { PostContent } from "@/components/PostContent";
 import { getAbout } from "@/lib/about";
 import { getExcerpt } from "@/lib/format";
 import { getImageUrl } from "@/lib/images";
+import { buttonVariants } from "@/components/buttonStyles";
+import { ArrowUpRightIcon } from "@/components/icons";
 import {
+  AUTHOR_NAME,
   DEFAULT_OG_IMAGE,
   SITE_DESCRIPTION,
   SITE_LOCALE,
@@ -36,77 +39,80 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-const socialLink =
-  "font-body text-caption tracking-wide text-accent uppercase underline-offset-4 hover:text-accent-hover hover:underline";
+const pageX = "mx-auto w-full max-w-page px-lg lg:px-4xl";
 
 export default async function SobrePage() {
   const about = await getAbout();
 
   if (!about) {
     return (
-      <div className="flex flex-col gap-3 px-6 py-16 sm:px-16">
-        <h1 className="font-heading text-hero font-semibold text-text-primary">
+      <div className={`${pageX} flex flex-col gap-roomy pt-2xl pb-4xl lg:gap-lg lg:pt-section-lg lg:pb-6xl`}>
+        <p className="font-body text-caption font-medium tracking-caps text-accent uppercase">
+          Sobre
+        </p>
+        <h1 className="font-heading text-hero-mobile font-semibold text-text-primary lg:text-hero">
           Sobre
         </h1>
-        <p className="font-body text-body text-text-secondary">
+        <p className="font-body text-reading text-text-secondary">
           Esta sección todavía no tiene contenido.
         </p>
       </div>
     );
   }
 
-  const photoUrl = getImageUrl(about.photo, "medium");
+  const photoUrl = getImageUrl(about.photo, "large");
+  const links = [
+    about.githubUrl && { href: about.githubUrl, label: "GitHub" },
+    about.linkedinUrl && { href: about.linkedinUrl, label: "LinkedIn" },
+  ].filter((link) => !!link);
 
   return (
-    <div className="mx-auto flex w-full max-w-reading flex-col gap-8 px-6 py-16 sm:px-0">
-      <h1 className="font-heading text-hero font-semibold text-text-primary">
-        {about.title}
-      </h1>
-
-      {photoUrl && about.photo && (
-        <Image
-          src={photoUrl}
-          alt={about.photo.alternativeText || about.title}
-          width={about.photo.formats?.medium?.width ?? about.photo.width ?? 640}
-          height={
-            about.photo.formats?.medium?.height ?? about.photo.height ?? 640
-          }
-          sizes="(min-width: 680px) 680px, 100vw"
-          className="h-auto w-full rounded-md object-cover"
-          priority
-        />
+    <div
+      className={`${pageX} flex flex-col gap-roomy pt-2xl pb-4xl lg:flex-row lg:items-start lg:justify-center lg:gap-section-lg lg:pt-section-lg lg:pb-6xl`}
+    >
+      {photoUrl && (
+        <figure className="relative h-about-photo-mobile w-full shrink-0 overflow-hidden rounded-md bg-bg-card lg:h-about-photo lg:w-2/5 xl:w-about-photo">
+          <Image
+            src={photoUrl}
+            alt={about.photo?.alternativeText || ""}
+            fill
+            sizes="(min-width: 1280px) 440px, (min-width: 1024px) 40vw, 100vw"
+            className="object-cover"
+            fetchPriority="high"
+            loading="eager"
+          />
+        </figure>
       )}
 
-      {about.content && <PostContent content={about.content} />}
+      <div className="flex w-full flex-col gap-roomy lg:max-w-about-text lg:gap-lg lg:pt-lg">
+        <p className="font-body text-caption font-medium tracking-caps text-accent uppercase">
+          Sobre
+        </p>
+        <h1 className="font-heading text-hero-mobile font-semibold text-text-primary wrap-break-word lg:text-hero">
+          {about.title}
+        </h1>
 
-      {(about.githubUrl || about.linkedinUrl) && (
-        <ul className="flex flex-wrap gap-6">
-          {about.githubUrl && (
-            <li>
-              <a
-                href={about.githubUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={socialLink}
-              >
-                GitHub
-              </a>
-            </li>
-          )}
-          {about.linkedinUrl && (
-            <li>
-              <a
-                href={about.linkedinUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={socialLink}
-              >
-                LinkedIn
-              </a>
-            </li>
-          )}
-        </ul>
-      )}
+        {about.content && <PostContent content={about.content} />}
+
+        {links.length > 0 && (
+          <ul className="flex flex-col gap-sm pt-xs lg:flex-row lg:pt-md">
+            {links.map(({ href, label }) => (
+              <li key={label}>
+                <a
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`${label} de ${AUTHOR_NAME} (abre en otra pestaña)`}
+                  className={`${buttonVariants.secondary} w-full lg:w-auto`}
+                >
+                  {label}
+                  <ArrowUpRightIcon className="size-icon-sm" />
+                </a>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
     </div>
   );
 }
