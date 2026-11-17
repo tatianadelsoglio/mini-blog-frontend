@@ -243,6 +243,8 @@
 
   /* Medidas de elementos (alto/ancho fijos del diseño). */
   --spacing-marker: 6px;
+  /* Sangría francesa de los versos largos (nota del .pen: 1em). */
+  --spacing-verse-hang: 1em;
   --spacing-active-bar: 3px;
   --spacing-active-bar-height: 28px;
   --spacing-ornament: 48px;
@@ -277,6 +279,7 @@
   --container-aside: 21.25rem;
   --container-search: 22.5rem;
   --container-poem-image: 22.5rem;
+  --container-poem-image-mobile: 15rem;
   --container-about-photo: 27.5rem;
   --container-poem: 32.5rem;
   --container-status-text: 32.5rem;

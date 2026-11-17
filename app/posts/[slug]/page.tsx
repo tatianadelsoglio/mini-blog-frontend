@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { BackLink } from "@/components/BackLink";
-import { PoemContent } from "@/components/PoemContent";
+import { PoemArticle } from "@/components/PoemArticle";
 import { PostNavigation } from "@/components/PostNavigation";
 import { ProseArticle } from "@/components/ProseArticle";
 import { POEMS_CATEGORY_SLUG } from "@/lib/categories";
@@ -68,18 +68,13 @@ export default async function PostPage(props: PageProps<"/posts/[slug]">) {
     <article>
       <BackLink />
 
-      {isPoem ? (
-        <div className="mx-auto w-full max-w-poem px-xl py-4xl">
-          <h1 className="font-heading text-post-title-mobile font-semibold text-text-primary lg:text-poem-title">
-            {post.title}
-          </h1>
-          <PoemContent content={post.content} />
-        </div>
-      ) : (
-        <ProseArticle post={post} />
-      )}
+      {isPoem ? <PoemArticle post={post} /> : <ProseArticle post={post} />}
 
-      <div className="mx-auto w-full max-w-wide px-lg pt-3xl pb-section-sm lg:px-4xl lg:pt-5xl lg:pb-section-lg xl:px-0">
+      <div
+        className={`mx-auto w-full max-w-wide px-lg pb-section-sm lg:px-4xl lg:pb-section-lg xl:px-0 ${
+          isPoem ? "" : "pt-3xl lg:pt-5xl"
+        }`}
+      >
         <PostNavigation {...adjacent} isPoem={isPoem} />
       </div>
     </article>
