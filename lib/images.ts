@@ -15,7 +15,14 @@ export function getImageUrl(
   size: ImageSize = "large"
 ): string | null {
   if (!image) return null;
-  const raw = image.formats?.[size]?.url ?? image.url;
+  return resolveImageSrc(image.formats?.[size]?.url ?? image.url);
+}
+
+/**
+ * Igual que getImageUrl pero para una URL suelta (p. ej. una imagen dentro del
+ * Markdown de un post).
+ */
+export function resolveImageSrc(raw: string): string | null {
   const url = /^https?:\/\//.test(raw)
     ? raw
     : `${process.env.STRAPI_URL?.replace(/\/$/, "") ?? ""}${raw}`;

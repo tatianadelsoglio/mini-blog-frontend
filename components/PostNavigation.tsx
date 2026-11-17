@@ -1,37 +1,42 @@
 import Link from "next/link";
 import type { AdjacentPosts } from "@/lib/postNavigation";
 
-export function PostNavigation({ previous, next }: AdjacentPosts) {
+interface PostNavigationProps extends AdjacentPosts {
+  /** En poemas la etiqueta es "Poema anterior" (navega entre poemas). */
+  isPoem?: boolean;
+}
+
+const card =
+  "group flex h-full flex-col gap-tight rounded-md border border-border p-roomy transition-colors hover:border-border-strong lg:gap-snug lg:px-xl lg:py-relaxed";
+const label =
+  "font-body text-caption font-medium tracking-caps text-accent-hover uppercase";
+const title =
+  "font-heading text-card-title-mobile font-semibold text-text-primary group-hover:text-accent-hover lg:text-card-title";
+
+export function PostNavigation({ previous, next, isPoem = false }: PostNavigationProps) {
   if (!previous && !next) return null;
 
   return (
     <nav
-      aria-label="Navegación entre posts"
-      className="grid grid-cols-1 gap-4 border-t border-border pt-8 sm:grid-cols-2"
+      aria-label={isPoem ? "Otros poemas" : "Otras historias"}
+      className="grid grid-cols-1 gap-sm lg:grid-cols-2 lg:gap-lg"
     >
       {previous ? (
-        <Link href={`/posts/${previous.slug}`} className="flex flex-col gap-1">
-          <span className="font-body text-caption tracking-wide text-accent uppercase">
-            ← Anterior
-          </span>
-          <span className="font-heading text-h3 font-semibold text-text-primary">
-            {previous.title}
-          </span>
+        <Link href={`/posts/${previous.slug}`} rel="prev" className={card}>
+          <span className={label}>← {isPoem ? "Poema anterior" : "Anterior"}</span>
+          <span className={title}>{previous.title}</span>
         </Link>
       ) : (
-        <span />
+        <span aria-hidden="true" className="hidden lg:block" />
       )}
       {next && (
         <Link
           href={`/posts/${next.slug}`}
-          className="flex flex-col gap-1 sm:items-end sm:text-right"
+          rel="next"
+          className={`${card} lg:items-end lg:text-right`}
         >
-          <span className="font-body text-caption tracking-wide text-accent uppercase">
-            Siguiente →
-          </span>
-          <span className="font-heading text-h3 font-semibold text-text-primary">
-            {next.title}
-          </span>
+          <span className={label}>Siguiente →</span>
+          <span className={title}>{next.title}</span>
         </Link>
       )}
     </nav>

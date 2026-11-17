@@ -1,12 +1,11 @@
 import type { Metadata } from "next";
-import Image from "next/image";
-import Link from "next/link";
 import { notFound } from "next/navigation";
+import { BackLink } from "@/components/BackLink";
 import { PoemContent } from "@/components/PoemContent";
-import { PostContent } from "@/components/PostContent";
 import { PostNavigation } from "@/components/PostNavigation";
+import { ProseArticle } from "@/components/ProseArticle";
 import { POEMS_CATEGORY_SLUG } from "@/lib/categories";
-import { formatDate, getPostSummary, getReadingTime } from "@/lib/format";
+import { getPostSummary } from "@/lib/format";
 import { getImageUrl } from "@/lib/images";
 import { getAdjacentPosts } from "@/lib/postNavigation";
 import { getPostBySlug, getPosts } from "@/lib/posts";
@@ -63,65 +62,26 @@ export default async function PostPage(props: PageProps<"/posts/[slug]">) {
 
   const posts = await getPosts();
   const adjacent = getAdjacentPosts(posts, post);
-  const date = formatDate(post.publishedAt);
-  const readingTime = getReadingTime(post.content);
-  const imageUrl = getImageUrl(post.coverImage, "large");
   const isPoem = post.category?.slug === POEMS_CATEGORY_SLUG;
 
   return (
-    <div className="flex flex-col">
-      <div className="px-6 pt-8 sm:px-16">
-        <Link
-          href="/historias"
-          className="font-body text-caption tracking-wide text-accent uppercase"
-        >
-          ← Volver a historias
-        </Link>
-      </div>
+    <article>
+      <BackLink />
 
-      {imageUrl ? (
-        <div className="relative mt-6 h-90 w-full">
-          <Image
-            src={imageUrl}
-            alt={post.coverImage?.alternativeText || post.title}
-            fill
-            sizes="100vw"
-            className="object-cover"
-            priority
-          />
-          <div className="absolute inset-0 bg-linear-to-t from-bg-inverse/85 via-bg-inverse/10 to-transparent" />
-          <h1 className="absolute inset-x-0 bottom-0 px-6 pb-8 font-heading text-hero font-semibold text-text-inverse sm:px-16">
+      {isPoem ? (
+        <div className="mx-auto w-full max-w-poem px-xl py-4xl">
+          <h1 className="font-heading text-post-title-mobile font-semibold text-text-primary lg:text-poem-title">
             {post.title}
           </h1>
+          <PoemContent content={post.content} />
         </div>
       ) : (
-        <h1 className="mt-6 px-6 font-heading text-hero font-semibold text-text-primary sm:px-16">
-          {post.title}
-        </h1>
+        <ProseArticle post={post} />
       )}
 
-      <article className="mx-auto flex w-full max-w-reading flex-col gap-6 px-6 py-10 sm:px-0">
-        <div className="flex flex-wrap items-center gap-x-3 font-body text-caption text-text-secondary">
-          {post.category && (
-            <Link
-              href={`/historias?categoria=${encodeURIComponent(post.category.slug)}`}
-              className="tracking-wide text-accent uppercase"
-            >
-              {post.category.name}
-            </Link>
-          )}
-          {date && <span>{date}</span>}
-          <span>{readingTime} min de lectura</span>
-        </div>
-
-        {isPoem ? (
-          <PoemContent content={post.content} />
-        ) : (
-          <PostContent content={post.content} />
-        )}
-
-        <PostNavigation {...adjacent} />
-      </article>
-    </div>
+      <div className="mx-auto w-full max-w-wide px-lg pt-3xl pb-section-sm lg:px-4xl lg:pt-5xl lg:pb-section-lg xl:px-0">
+        <PostNavigation {...adjacent} isPoem={isPoem} />
+      </div>
+    </article>
   );
 }
