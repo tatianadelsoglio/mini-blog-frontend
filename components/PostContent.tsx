@@ -74,10 +74,11 @@ const components: Components = {
       {children}
     </ol>
   ),
-  // El contenido va en un solo contenedor: la segunda columna de la grilla.
+  // El contenido va en un solo contenedor (bloque, para no partir el texto en
+  // línea): la segunda columna de la grilla.
   li: ({ children }) => (
     <li>
-      <div className="flex min-w-0 flex-col gap-sm">{children}</div>
+      <div className="min-w-0 [&>*+*]:mt-sm">{children}</div>
     </li>
   ),
 

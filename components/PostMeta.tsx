@@ -32,7 +32,12 @@ export function PostMeta({
     >
       {visible.map((item, index) => (
         <Fragment key={item.key}>
-          {index > 0 && <span aria-hidden="true">·</span>}
+          {/* El separador comparte la visibilidad responsive del ítem. */}
+          {index > 0 && (
+            <span aria-hidden="true" className={item.className}>
+              ·
+            </span>
+          )}
           <span
             className={`${item.emphasis ? emphasisClass[item.emphasis] : ""} ${item.className ?? ""}`}
           >

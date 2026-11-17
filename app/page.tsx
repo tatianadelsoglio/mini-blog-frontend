@@ -78,9 +78,11 @@ export default async function Home() {
               <h2 className="font-heading text-h2 font-semibold text-text-primary">
                 Recientes
               </h2>
-              <Link href="/historias" className={`${textLinkClass} hidden lg:inline-flex`}>
-                Ver todas las historias →
-              </Link>
+              <span className="hidden lg:block">
+                <Link href="/historias" className={textLinkClass}>
+                  Ver todas las historias →
+                </Link>
+              </span>
             </div>
             <PostList posts={recent} />
             <Link
