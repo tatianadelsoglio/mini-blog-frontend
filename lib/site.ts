@@ -19,3 +19,9 @@ export const DEFAULT_OG_IMAGE = {
   height: 630,
   alt: SITE_NAME,
 };
+
+/**
+ * Nombre para textos accesibles ("GitHub de Tatiana"). El single type About
+ * todavía no tiene un campo de nombre; cuando lo tenga, debería salir de ahí.
+ */
+export const AUTHOR_NAME = "Tatiana";
