@@ -33,16 +33,26 @@ export function parseCodeFence(pre: Element | undefined): CodeFence {
   };
 }
 
-/** true si el párrafo contiene solo una imagen (se renderiza como figura). */
-export function isImageOnlyParagraph(node: Element | undefined): boolean {
+export interface MarkdownImage {
+  src: string;
+  alt: string;
+  title: string | null;
+}
+
+/** Si el párrafo contiene solo una imagen, sus datos (se renderiza como figura). */
+export function getSoleImage(node: Element | undefined): MarkdownImage | null {
   const meaningful = node?.children.filter(
     (child) => !(child.type === "text" && child.value.trim() === "")
   );
-  return (
-    meaningful?.length === 1 &&
-    meaningful[0].type === "element" &&
-    meaningful[0].tagName === "img"
-  );
+  const img = meaningful?.length === 1 ? meaningful[0] : undefined;
+  if (img?.type !== "element" || img.tagName !== "img") return null;
+  const { src, alt, title } = img.properties;
+  if (typeof src !== "string") return null;
+  return {
+    src,
+    alt: typeof alt === "string" ? alt : "",
+    title: typeof title === "string" ? title : null,
+  };
 }
 
 /** Párrafo de firma de cita: empieza con raya ("— Autor"). */

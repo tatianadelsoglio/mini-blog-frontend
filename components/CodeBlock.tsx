@@ -23,6 +23,7 @@ export function CodeBlock({ code, language, title }: CodeBlockProps) {
       <pre
         // Focusable para poder scrollear con teclado cuando desborda.
         tabIndex={0}
+        role="region"
         aria-label={label ? `Código: ${label}` : "Código"}
         className="overflow-x-auto p-md lg:px-lg lg:py-roomy"
       >
