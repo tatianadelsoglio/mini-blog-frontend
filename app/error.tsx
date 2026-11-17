@@ -6,10 +6,10 @@ import { CloudOffIcon, RotateCcwIcon } from "@/components/icons";
 
 export default function Error({
   error,
-  reset,
+  retry,
 }: {
   error: Error & { digest?: string };
-  reset: () => void;
+  retry: () => void;
 }) {
   return (
     <div className="mx-auto flex min-h-status-page-mobile w-full max-w-page flex-col items-center justify-center gap-md px-lg text-center lg:min-h-status-page lg:gap-roomy lg:px-4xl">
@@ -26,7 +26,7 @@ export default function Error({
       <div className="flex w-full flex-col items-center gap-sm pt-sm lg:w-auto lg:flex-row lg:pt-md">
         <button
           type="button"
-          onClick={reset}
+          onClick={() => retry()}
           className={`${buttonVariants.primary} w-full lg:w-auto`}
         >
           Reintentar
