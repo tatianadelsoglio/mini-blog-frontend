@@ -8,6 +8,8 @@ import { ThemeSwitch } from "@/components/ThemeSwitch";
 import { isActiveLink, NAV_LINKS } from "@/lib/navigation";
 
 const DIALOG_ID = "menu-principal";
+// Breakpoint lg de Tailwind (64rem), desde donde se muestra la nav de escritorio.
+const DESKTOP_QUERY = "(min-width: 64rem)";
 
 /**
  * Menú a pantalla completa con <dialog> nativo: showModal() aporta Esc, fondo
@@ -23,6 +25,18 @@ export function MobileMenu() {
   useEffect(() => {
     dialogRef.current?.close();
   }, [pathname]);
+
+  // El botón vive en un contenedor oculto desde lg: si la ventana crece con el
+  // menú abierto (p. ej. al girar una tablet), se cierra en vez de quedar un
+  // modal invisible que deja la página inerte.
+  useEffect(() => {
+    const desktop = window.matchMedia(DESKTOP_QUERY);
+    const closeOnDesktop = (event: MediaQueryListEvent) => {
+      if (event.matches) dialogRef.current?.close();
+    };
+    desktop.addEventListener("change", closeOnDesktop);
+    return () => desktop.removeEventListener("change", closeOnDesktop);
+  }, []);
 
   const openMenu = () => {
     dialogRef.current?.showModal();
