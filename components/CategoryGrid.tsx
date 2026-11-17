@@ -1,13 +1,6 @@
 import Link from "next/link";
 import { ArrowUpRightIcon } from "@/components/icons";
-import { POEMS_CATEGORY_SLUG, type CategoryWithCount } from "@/lib/categories";
-
-function countLabel(category: CategoryWithCount): string {
-  const isPoems = category.slug === POEMS_CATEGORY_SLUG;
-  const one = isPoems ? "poema" : "historia";
-  const many = isPoems ? "poemas" : "historias";
-  return `${category.postCount} ${category.postCount === 1 ? one : many}`;
-}
+import { getCategoryCountLabel, type CategoryWithCount } from "@/lib/categories";
 
 const href = (slug: string) => `/historias?categoria=${encodeURIComponent(slug)}`;
 
@@ -33,7 +26,7 @@ export function CategoryGrid({
                   {category.name}
                 </h3>
                 <span className="font-body text-note text-accent-hover">
-                  {countLabel(category)}
+                  {getCategoryCountLabel(category)}
                 </span>
               </div>
               <ArrowUpRightIcon className="size-icon-lg shrink-0 text-accent-hover" />
@@ -61,7 +54,7 @@ export function CategoryGrid({
                 </span>
               )}
               <span className="font-body text-caption font-medium tracking-caps text-accent-hover uppercase">
-                {countLabel(category)}
+                {getCategoryCountLabel(category)}
               </span>
             </Link>
           </li>

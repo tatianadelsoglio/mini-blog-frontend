@@ -8,9 +8,10 @@ import { getCategories } from "@/lib/categories";
 import { getPosts } from "@/lib/posts";
 import {
   filterPosts,
+  getResultsLabel,
+  isPageOutOfRange,
   paginate,
   parseHistoriasParams,
-  POSTS_PER_PAGE,
 } from "@/lib/postFilters";
 
 export async function generateMetadata(
@@ -30,13 +31,6 @@ export async function generateMetadata(
 
 const pageX = "mx-auto w-full max-w-page px-lg lg:px-4xl";
 
-function resultsLabel(page: number, total: number): string {
-  const from = (page - 1) * POSTS_PER_PAGE + 1;
-  const to = Math.min(page * POSTS_PER_PAGE, total);
-  const noun = total === 1 ? "historia" : "historias";
-  return `Mostrando ${from}–${to} de ${total} ${noun}`;
-}
-
 // Los parámetros de la URL hacen que la página se renderice por request, pero
 // los datos salen de la caché de fetch (tags posts/categories): Strapi no se
 // consulta en cada búsqueda.
@@ -48,7 +42,7 @@ export default async function HistoriasPage(props: PageProps<"/historias">) {
   const { items, page, pageCount, total } = paginate(filtered, filters.pagina);
 
   // paginate ajusta la página al rango válido; si pidieron una que no existe, 404.
-  if (filters.pagina > pageCount) notFound();
+  if (isPageOutOfRange(filters.pagina, pageCount)) notFound();
 
   const categoryName =
     categories.find((category) => category.slug === filters.categoria)?.name ??
@@ -91,7 +85,7 @@ export default async function HistoriasPage(props: PageProps<"/historias">) {
         >
           {/* Anuncia el resultado al filtrar o buscar (navegación del cliente). */}
           <p role="status" className="font-body text-caption text-text-secondary">
-            {total === 0 ? "0 historias encontradas" : resultsLabel(page, total)}
+            {total === 0 ? "0 historias encontradas" : getResultsLabel(page, total)}
           </p>
 
           {items.length > 0 ? (

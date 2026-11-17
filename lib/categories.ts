@@ -19,6 +19,14 @@ export interface CategoryWithCount extends Category {
   postCount: number;
 }
 
+/** "3 historias" / "1 poema": cantidad con el sustantivo de la categoría. */
+export function getCategoryCountLabel(category: CategoryWithCount): string {
+  const isPoems = category.slug === POEMS_CATEGORY_SLUG;
+  const one = isPoems ? "poema" : "historia";
+  const many = isPoems ? "poemas" : "historias";
+  return `${category.postCount} ${category.postCount === 1 ? one : many}`;
+}
+
 /** Cantidad de posts publicados por categoría, calculada sobre los posts cacheados. */
 export function withPostCount(
   categories: Category[],

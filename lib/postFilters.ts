@@ -64,6 +64,19 @@ export function paginate<T>(items: T[], page: number, perPage = POSTS_PER_PAGE):
   };
 }
 
+/** True si la página pedida no existe (paginate la ajusta; la página responde 404). */
+export function isPageOutOfRange(requested: number, pageCount: number): boolean {
+  return requested > pageCount;
+}
+
+/** "Mostrando 1–6 de 14 historias" (singular si hay una sola). */
+export function getResultsLabel(page: number, total: number): string {
+  const from = (page - 1) * POSTS_PER_PAGE + 1;
+  const to = Math.min(page * POSTS_PER_PAGE, total);
+  const noun = total === 1 ? "historia" : "historias";
+  return `Mostrando ${from}–${to} de ${total} ${noun}`;
+}
+
 /** Arma /historias?categoria=&q=&pagina= omitiendo los valores por defecto. */
 export function buildHistoriasHref({ categoria, q, pagina }: Partial<HistoriasParams>): string {
   const params = new URLSearchParams();
